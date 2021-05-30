@@ -1,0 +1,10 @@
+{
+  "session": {
+    "secret": "GO7W#Qmwh58U"
+  },
+  "redis": {
+    "host": "localhost",
+    "port": 6379,
+    "password": "changeme"
+  }
+}
