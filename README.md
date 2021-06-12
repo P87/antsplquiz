@@ -1,2 +1,3 @@
-Add instructions to change redis password
-Make webpack only compile front end JS etc and just use ts-node for the server
+TODO:
+
+- Add instructions to change redis/mysql password or implement some config overriding based on environment

@@ -5,6 +5,7 @@ import redis from "redis";
 import session from "express-session";
 import RedisConnect from "connect-redis";
 import config from "../config.json";
+import routes from "./routes";
 
 const RedisStore = RedisConnect(session);
 
@@ -37,33 +38,13 @@ app.use(
     resave: false,
   })
 );
-app.use(express.urlencoded({
-  extended: true
-}))
+app.use(
+  express.urlencoded({
+    extended: true,
+  })
+);
 
-app.get("/", (req, res) => {
-  if (!req.session.views) {
-    req.session.views = 1;
-  } else {
-    req.session.views++;
-  }
-  const loggedin = false;
-  loggedin ? res.render("home") : res.render("login");
-});
-
-app.get("/register", (req, res) => {
-  res.render("register");
-});
-
-app.post('/register', (req, res) => {
-  const { username, email, password, leagueCode } = req.body;
-  console.log(req.body);
-
-  if ([username, email, password, leagueCode].some(field => !field)) {
-    return res.render('register', {errorMessage: 'All fields are required', ...req.body});
-  }
-  return res.render('register');
-});
+app.use("/", routes);
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`);

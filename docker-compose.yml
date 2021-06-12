@@ -9,3 +9,14 @@ services:
     command:
       ["redis-server", "--appendonly", "yes", "--requirepass", "changeme"]
     hostname: redis
+  mysql:
+    image: "mysql"
+    restart: "always"
+    command: --init-file /data/application/init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: "changeme"
+      MYSQL_USER: "plquiz"
+      MYSQL_PASS: "changeme"
+    volumes:
+      - "./mysql-volume:/var/lib/mysql"
+      - "./src/init.sql:/data/application/init.sql"
