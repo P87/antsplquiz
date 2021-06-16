@@ -9,8 +9,18 @@ routes.get("/", (req, res) => {
   } else {
     req.session.views++;
   }
+  const successfulRegistration = req.query["register-success"];
+
   const loggedin = false;
-  loggedin ? res.render("home") : res.render("login");
+  loggedin
+    ? res.render("home")
+    : res.render("login", {
+        ...(successfulRegistration
+          ? {
+              successfulRegistration: true,
+            }
+          : {}),
+      });
 });
 
 routes.use("/register", register);

@@ -9,6 +9,11 @@
         <div class="row">
             <div class="col"></div>
             <div class="col">
+                <% if (locals.successfulRegistration) { %>
+                    <div class="alert alert-success" role="alert">
+                        Account created successfully, you may login below.
+                    </div>
+                <% } %>
                 <div id="login-form"></div>
                 <form>
                     <div class="mb-3">

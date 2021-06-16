@@ -4,3 +4,4 @@ coverage
 redis-volume
 mysql-volume
 *.log
+.DS_Store

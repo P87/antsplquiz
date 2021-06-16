@@ -11,12 +11,14 @@ services:
     hostname: redis
   mysql:
     image: "mysql"
+    ports:
+      - "3306:3306"
     restart: "always"
-    command: --init-file /data/application/init.sql
+    command: --init-file /data/application/init.sql --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: "changeme"
       MYSQL_USER: "plquiz"
-      MYSQL_PASS: "changeme"
+      MYSQL_PASSWORD: "changeme"
     volumes:
       - "./mysql-volume:/var/lib/mysql"
       - "./src/init.sql:/data/application/init.sql"
