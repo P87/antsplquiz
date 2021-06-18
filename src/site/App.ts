@@ -9,18 +9,7 @@ import routes from "./routes";
 
 const RedisStore = RedisConnect(session);
 
-declare module "express-session" {
-  interface SessionData {
-    views?: number;
-  }
-}
-
-// @todo change this to just config.redis?
-const redisClient = redis.createClient({
-  host: config.redis.host,
-  port: config.redis.port,
-  password: config.redis.password,
-});
+const redisClient = redis.createClient(config.redis);
 
 const app = express();
 const port = 3000;
@@ -38,6 +27,7 @@ app.use(
     resave: false,
   })
 );
+
 app.use(
   express.urlencoded({
     extended: true,
