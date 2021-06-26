@@ -22,3 +22,4 @@ services:
     volumes:
       - "./mysql-volume:/var/lib/mysql"
       - "./src/init.sql:/data/application/init.sql"
+      - "./src/teamplayers.sql:/data/application/teamplayers.sql"

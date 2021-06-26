@@ -6,10 +6,10 @@ const { NODE_ENV = "production" } = process.env;
 
 module.exports = {
   entry: {
-    "js/app": "./src/site/assets/js/apps.ts",
+    "js/app": "./src/site/assets/js/apps.tsx",
   },
   mode: NODE_ENV,
-  target: "node",
+  target: "web",
   output: {
     path: path.resolve(__dirname, "src/site/public/assets"),
     filename: "[name].bundle.js",
@@ -22,7 +22,6 @@ module.exports = {
   resolve: {
     extensions: [".ts", ".js", ".tsx", ".ejs"],
   },
-  externals: [nodeExternals()],
   module: {
     rules: [
       {
