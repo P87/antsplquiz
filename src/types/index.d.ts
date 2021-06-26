@@ -21,6 +21,19 @@ export interface AnswerSet {
   name: string;
 }
 
+export interface Question {
+  id: number;
+  answer_set_id: null | number;
+  answer_type: string;
+  correct_answer: null | string;
+  correct_answer_set_id: null | number;
+  date_added: string;
+  deadline: string;
+  league_id: number;
+  points: number;
+  question: string;
+}
+
 export interface MySQLUser extends RowDataPacket {
   id: number;
   display_name: string;

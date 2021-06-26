@@ -30,11 +30,12 @@ CREATE TABLE IF NOT EXISTS `questions` (
 	`question` TEXT NOT NULL,
 	`answer_set_id` INT,
 	`correct_answer_set_id` INT,
-	`answer_type` VARCHAR(10),
+	`answer_type` VARCHAR(15),
 	`correct_answer` TEXT,
 	`deadline` TIMESTAMP NOT NULL,
 	`points` INT NOT NULL,
 	`date_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	KEY `deadline` (`deadline`) USING BTREE,
 	PRIMARY KEY (`id`)
 );
 CREATE TABLE IF NOT EXISTS `answer_sets` (

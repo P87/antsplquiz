@@ -1,15 +1,29 @@
 import React, { useState } from "react";
-import { AnswerSet } from "../../../../types";
+import { AnswerSet, Question } from "../../../../types";
 
 interface FormProps {
-  answerSets: any;
+  answerSets: AnswerSet[];
 }
 
 interface Props extends FormProps {
-  questions: any;
+  questions: {
+    activeQuestions: Question[];
+    pastQuestions: Question[];
+  };
 }
 
-const QuestionsAdmin = ({ answerSets }: Props): JSX.Element => {
+interface FormState {
+  question: string;
+  answerType: string | number;
+  deadlineDay: undefined | number;
+  deadlineMonth: undefined | number;
+  deadlineYear: undefined | number;
+  deadlineHour: undefined | number;
+  deadlineMinute: undefined | number;
+  points: undefined | number;
+}
+
+const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
   const [showForm, setShowForm] = useState(false);
 
   return (
@@ -27,22 +41,98 @@ const QuestionsAdmin = ({ answerSets }: Props): JSX.Element => {
         </button>
       )}
       <h2>Active Questions</h2>
+      <div>
+        <div className="row">
+          <div className="col">Question</div>
+          <div className="col">Deadline</div>
+          <div className="col">Type</div>
+          <div className="col">Points</div>
+        </div>
+
+        {questions.activeQuestions.map((question) => {
+          const deadline = new Date(question.deadline);
+          const [month, day, year, hour, minutes, seconds] = [
+            deadline.getMonth(),
+            deadline.getDate(),
+            deadline.getFullYear(),
+            deadline.getHours(),
+            deadline.getMinutes(),
+            deadline.getSeconds(),
+          ];
+
+          const type =
+            question.answer_type ??
+            answerSets.find(
+              (set: any) => set && set.id === question.answer_set_id
+            )?.name;
+
+          return (
+            <div className="row">
+              <div className="col">{question.question}</div>
+              <div className="col">
+                {day}/{month}/{year} {hour}:{minutes}:{seconds}
+              </div>
+              <div className="col">{type}</div>
+              <div className="col">{question.points}</div>
+            </div>
+          );
+        })}
+      </div>
 
       <h2>Previous Questions</h2>
+      <div>
+        <div className="row">
+          <div className="col">Question</div>
+          <div className="col">Answer</div>
+          <div className="col">Deadline</div>
+          <div className="col">Type</div>
+          <div className="col">Points</div>
+        </div>
+
+        {questions.pastQuestions.map((question) => {
+          const deadline = new Date(question.deadline);
+          const [month, day, year, hour, minutes, seconds] = [
+            deadline.getMonth(),
+            deadline.getDate(),
+            deadline.getFullYear(),
+            deadline.getHours(),
+            deadline.getMinutes(),
+            deadline.getSeconds(),
+          ];
+
+          const type =
+            question.answer_type ??
+            answerSets.find(
+              (set: any) => set && set.id === question.answer_set_id
+            )?.name;
+
+          return (
+            <div className="row">
+              <div className="col">{question.question}</div>
+              <div className="col">{question.correct_answer}</div>
+              <div className="col">
+                {day}/{month}/{year} {hour}:{minutes}:{seconds}
+              </div>
+              <div className="col">{type}</div>
+              <div className="col">{question.points}</div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
 
 const QuestionForm = ({ answerSets }: FormProps): JSX.Element => {
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = useState<FormState>({
     question: "",
     answerType: "",
-    deadlineDay: "",
-    deadlineMonth: "",
-    deadlineYear: "",
-    deadlineHour: "",
-    deadlineMinute: "",
-    points: "",
+    deadlineDay: undefined,
+    deadlineMonth: undefined,
+    deadlineYear: undefined,
+    deadlineHour: undefined,
+    deadlineMinute: undefined,
+    points: undefined,
   });
 
   const [resultState, setResultState] = useState<null | boolean>(null);
@@ -79,8 +169,8 @@ const QuestionForm = ({ answerSets }: FormProps): JSX.Element => {
         },
         body: JSON.stringify({
           question,
-          answerType: typeof answerType === "number" ? null : answerType,
-          answerSetId: typeof answerType === "number" ? answerType : null,
+          answerType: isNaN(answerType as number) ? answerType : null,
+          answerSetId: isNaN(answerType as number) ? null : +answerType,
           deadline: `${deadlineYear}-${deadlineMonth}-${deadlineDay} ${deadlineHour}:${deadlineMinute}:00`,
           points,
         }),

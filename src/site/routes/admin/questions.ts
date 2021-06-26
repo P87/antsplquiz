@@ -21,13 +21,34 @@ routes.get("/answer-sets", async (req, res) => {
 });
 
 routes.get("/get-questions", async (req, res) => {
+  const now = new Date();
+  const [month, day, year, hour, minutes, seconds] = [
+    now.getMonth(),
+    now.getDate(),
+    now.getFullYear(),
+    now.getHours(),
+    now.getMinutes(),
+    now.getSeconds(),
+  ];
+  const date = `${year}-${month + 1}-${day} ${hour}:${minutes}:${seconds}`;
+
   try {
-    // @todo some pagination and transaction to do multiple selects
-    const questions = await mysql.query("SELECT * FROM `questions`", []);
-    if (!questions) {
-      throw new Error("Error with questions query");
+    // @todo some pagination
+    const activeQuestions = await mysql.query(
+      `SELECT * FROM \`questions\` WHERE \`deadline\` > "${date}"`,
+      []
+    );
+    if (!activeQuestions) {
+      throw new Error("Error getting active questions");
     }
-    return res.json(questions);
+    const pastQuestions = await mysql.query(
+      `SELECT * FROM \`questions\` WHERE \`deadline\` < "${date}"`,
+      []
+    );
+    if (!pastQuestions) {
+      throw new Error("Error getting past questions");
+    }
+    return res.json({ activeQuestions, pastQuestions });
   } catch (err) {
     console.error("Error getting questions", err);
     throw new Error("Error getting questions");
