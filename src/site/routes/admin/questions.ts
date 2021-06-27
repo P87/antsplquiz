@@ -4,7 +4,7 @@ import * as mysql from "../../utils/mysql";
 const routes = Router();
 
 routes.get("/", (req, res) => {
-  res.render("admin/questions");
+  res.render("admin/questions", {section: "admin", isAdmin: req.session.isAdmin});
 });
 
 routes.get("/answer-sets", async (req, res) => {

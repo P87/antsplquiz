@@ -1,37 +1,46 @@
-<%- include('./partials/head') %>
-<body>
+<%- include('./partials/head', {loggedIn: false, section: "home" }) %>
     <div class="container">
-        <header class="row">
-            <div class="col">
-                <h1>Ant's Premier League Quiz</h1>
+        <% if (locals.successfulRegistration) { %>
+            <div class="row mb-4">
+                <div class="col"></div>
+                <div class="col-10">
+                    <div class="alert alert-success text-center" role="alert">
+                        Account created successfully, once Ant confirms your account you will be able to login.
+                    </div>
+                </div>
+                <div class="col"></div>
             </div>
-        </header>
+        <% } %>
+        <% if (locals.errorMessage) { %>
+            <div class="row mb-4">
+                <div class="col"></div>
+                <div class="col-10">
+                    <div class="alert alert-danger text-center" role="alert">
+                        <%= errorMessage %>
+                    </div>
+                </div>
+                <div class="col"></div>
+            </div>
+        <% } %>
         <div class="row">
             <div class="col"></div>
             <div class="col">
-                <% if (locals.successfulRegistration) { %>
-                    <div class="alert alert-success" role="alert">
-                        Account created successfully, you may login below.
-                    </div>
-                <% } %>
-                <% if (locals.errorMessage) { %>
-                    <div class="alert alert-danger" role="alert">
-                        <%= errorMessage %>
-                    </div>
-                <% } %>
                 <div id="login-form"></div>
                 <form action="/" method="post">
                     <div class="mb-3">
-                        <label for="username" class="form-label">Username</label>
-                        <input type="text" class="form-control" id="username" name="username" value="<%= locals.username ? locals.username : '' %>" />
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="<%= locals.username ? locals.username : '' %>" />
+                            <label for="username" class="form-label">Username</label>
+                        </div>
                     </div>
                     <div class="mb-3">
-                        <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password" />
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" />
+                            <label for="password" class="form-label">Password</label>
+                        </div>
                     </div>
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                     <button type="submit" class="btn btn-primary">Login</button>
-                    <a href="/register">Register</a>
                 </form>
             </div>
             <div class="col"></div>

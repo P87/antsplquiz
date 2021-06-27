@@ -1,39 +1,42 @@
-<%- include('./partials/head', {title: 'Register'}) %>
-<body>
+<%- include('./partials/head', {title: 'Register', loggedIn: false, section: 'register'}) %>
     <div class="container">
-        <h1>Register</h1>
+        <div class="row mb-3">
+            <div class="col"></div>
+            <div class="col-10"><h1>Register</h1></div>
+            <div class="col"></div>
+        </div>
         <div class="row">
             <div class="col"></div>
-            <div class="col">
+            <div class="col-10">
                 <% if (locals.errorMessage) { %>
                     <div class="alert alert-danger" role="alert">
                         <%= errorMessage %>
                     </div>
                 <% } %>
                 <form action="" method="post">
-                    <div class="mb-3">
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control" id="username" name="username" value="<%= locals.username ? locals.username : '' %>" placeholder="Username">
                         <label for="username" class="form-label">Username (What you will login with)</label>
-                        <input type="text" class="form-control" id="username" name="username" value="<%= locals.username ? locals.username : '' %>">
                     </div>
-                    <div class="mb-3">
-                        <label for="display_name" class="form-label">Display Name (Who others will see you as)</label>
-                        <input type="text" class="form-control" id="display_name" name="display_name" value="<%= locals.display_name ? locals.display_name : '' %>">
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control" id="display_name" name="display_name" value="<%= locals.display_name ? locals.display_name : '' %>" placeholder="Display Name">
+                        <label for="display_name" class="form-label">Display Name (How others will see you as)</label>
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 form-floating">
+                        <input type="password" class="form-control" id="password" name="password" placeholder="Password">
                         <label for="password" class="form-label">Password</label>
-                        <input type="password" class="form-control" id="password" name="password">
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 form-floating">
+                        <input type="password" class="form-control" id="confirm_password" name="confirm_password" placeholder="Confirm Password">
                         <label for="confirm_password" class="form-label">Confirm Password</label>
-                        <input type="password" class="form-control" id="confirm_password" name="confirm_password">
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 form-floating">
+                        <input type="email" class="form-control" id="email" name="email" value="<%= locals.email ? locals.email : '' %>" placeholder="Email">
                         <label for="email" class="form-label">Email</label>
-                        <input type="email" class="form-control" id="email" name="email" value="<%= locals.email ? locals.email : '' %>">
                     </div>
-                    <div class="mb-3">
+                    <div class="mb-3 form-floating">
+                        <input type="text" class="form-control" id="leagueCode" name="leagueCode" value="<%= locals.leagueCode ? locals.leagueCode : '' %>" placeholder="League Code">
                         <label for="leagueCode" class="form-label">League Code</label>
-                        <input type="text" class="form-control" id="leagueCode" name="leagueCode" value="<%= locals.leagueCode ? locals.leagueCode : '' %>">
                     </div>
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                     <button type="submit" class="btn btn-primary">Register</button>

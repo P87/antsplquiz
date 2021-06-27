@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 	`display_name` VARCHAR(255) NOT NULL,
 	`is_admin` BOOLEAN DEFAULT false,
 	`paid` BOOLEAN DEFAULT false,
+	`confirmed` BOOLEAN NOT NULL DEFAULT false,
 	`date_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`)
 );

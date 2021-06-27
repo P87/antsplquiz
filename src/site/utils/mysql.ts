@@ -29,5 +29,6 @@ export const insertOne = async (query: string, params: string[]) => {
     return rows.affectedRows === 1;
   } catch (err) {
     console.error("[MySQL] Error with insertOne query", err);
+    return false;
   }
 };

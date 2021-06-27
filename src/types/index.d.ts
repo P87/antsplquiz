@@ -38,6 +38,7 @@ export interface MySQLUser extends RowDataPacket {
   id: number;
   display_name: string;
   is_admin: boolean;
+  confirmed: boolean;
 }
 
 export interface MySQLCount extends RowDataPacket {

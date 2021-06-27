@@ -1,12 +1,11 @@
 import { Router } from "express";
 import home from "./home";
 import questions from "./questions";
-import requireAuth from "../../middleware/loggedIn";
 
 const routes = Router();
 
-routes.get("/", requireAuth, home);
+routes.get("/", home);
 
-routes.use("/questions", requireAuth, questions);
+routes.use("/questions", questions);
 
 export default routes;

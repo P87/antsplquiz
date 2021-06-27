@@ -5,6 +5,8 @@ import csurf from "csurf";
 import config from "../../config.json";
 import crypto from "crypto";
 import isAdmin from "../middleware/isAdmin";
+import isLoggedIn from "../middleware/loggedIn"
+import logout from "./logout";
 import * as mysql from "../utils/mysql";
 import { MySQLUser } from "../../types";
 
@@ -15,7 +17,7 @@ routes.get("/", csrfProtection as any, (req, res) => {
   const successfulRegistration = req.query["register-success"];
 
   req.session.loggedIn
-    ? res.render("home", { display_name: req.session.displayName })
+    ? res.render("home", { display_name: req.session.displayName, isAdmin: req.session.isAdmin })
     : res.render("login", {
         csrfToken: req.csrfToken(),
         ...(successfulRegistration
@@ -39,7 +41,7 @@ routes.post("/", csrfProtection as any, async (req, res) => {
 
   try {
     const check = await mysql.query<MySQLUser>(
-      "SELECT id, display_name, is_admin FROM users WHERE username = ? AND password = ? LIMIT 1",
+      "SELECT id, display_name, is_admin, confirmed FROM users WHERE username = ? AND password = ? LIMIT 1",
       [
         username,
         crypto
@@ -65,6 +67,12 @@ routes.post("/", csrfProtection as any, async (req, res) => {
         csrfToken: req.csrfToken(),
         ...req.body,
       });
+    } else if (!check[0].confirmed) {
+        return res.render("login", {
+          errorMessage: "Still waiting for Ant to confirm your account before you can login",
+          csrfToken: req.csrfToken(),
+          ...req.body,
+        })
     } else {
       const user = check[0];
       req.session.loggedIn = true;
@@ -89,5 +97,7 @@ routes.post("/", csrfProtection as any, async (req, res) => {
 routes.use("/register", register);
 
 routes.use("/admin", isAdmin, admin);
+
+routes.use("/logout", isLoggedIn, logout);
 
 export default routes;
