@@ -5,3 +5,4 @@ redis-volume
 mysql-volume
 *.log
 .DS_Store
+.idea/

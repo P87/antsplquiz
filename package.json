@@ -16,7 +16,8 @@
     "start": "ts-node src/site/App.ts",
     "lint": "eslint . --ext .jsx,.ts,.tsx",
     "prettier": "prettier .",
-    "lint:fix": "prettier --write . && yarn lint"
+    "lint:fix": "prettier --write . && yarn lint",
+    "test": "jest"
   },
   "dependencies": {
     "assert": "^2.0.0",
@@ -43,6 +44,7 @@
     "@types/csurf": "^1.11.1",
     "@types/express": "^4.17.11",
     "@types/express-session": "^1.17.3",
+    "@types/jest": "^26.0.23",
     "@types/mysql": "^2.15.18",
     "@types/node": "^15.6.0",
     "@types/react": "^17.0.6",
@@ -55,11 +57,13 @@
     "crypto-browserify": "^3.12.0",
     "css-loader": "^5.2.6",
     "eslint": "^7.27.0",
+    "jest": "^27.0.5",
     "mini-css-extract-plugin": "^1.6.0",
     "nodemon": "^2.0.7",
     "path-browserify": "^1.0.1",
     "prettier": "^2.3.0",
     "stream-browserify": "^3.0.0",
+    "ts-jest": "^27.0.3",
     "ts-loader": "^9.2.2",
     "ts-node": "^10.0.0",
     "typescript": "^4.2.4",

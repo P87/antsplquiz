@@ -1,5 +1,6 @@
-// @todo type these properly
-export default (req: any, res: any, next: any): any => {
+import { Request, Response, NextFunction } from "express";
+
+export default (req: Request, res: Response, next: NextFunction): void => {
   if (!req.session.loggedIn) {
     return res.redirect("/");
   }
