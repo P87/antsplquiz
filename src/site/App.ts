@@ -4,8 +4,8 @@ import path from "path";
 import redis from "redis";
 import session from "express-session";
 import RedisConnect from "connect-redis";
-import config from "../config.json";
 import routes from "./routes";
+import config from "./utils/config";
 
 const RedisStore = RedisConnect(session);
 

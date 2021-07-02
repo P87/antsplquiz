@@ -1,7 +1,7 @@
 import * as mysql from "../../utils/mysql";
 import { MySQLCount } from "../../../types";
 import crypto from "crypto";
-import config from "../../../config.json";
+import config from "../../utils/config";
 import { Request, Response } from "express";
 
 export default async (req: Request, res: Response) => {

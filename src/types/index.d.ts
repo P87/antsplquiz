@@ -1,5 +1,21 @@
 import { RowDataPacket } from "mysql2";
 
+export interface Config {
+  "session": {
+    "secret": string;
+  },
+  "passwords": {
+    "salt": string;
+    "pepper": string;
+  },
+  "redis": {
+    "host": string;
+    "port": number;
+    "password": string;
+  },
+  "mysql": MySQLConfig
+}
+
 export interface MySQLConfig {
   host: string;
   user: string;

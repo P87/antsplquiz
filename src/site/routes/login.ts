@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { MySQLUser } from "../../types";
-import config from "../../config.json";
+import config from "../utils/config";
 import crypto from "crypto";
 import * as mysql from "../utils/mysql";
 

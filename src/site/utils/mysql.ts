@@ -3,7 +3,7 @@ import mysql2, {
   ResultSetHeader,
   RowDataPacket,
 } from "mysql2/promise";
-import config from "../../config.json";
+import config from "../utils/config";
 
 const pool = mysql2.createPool(config.mysql);
 pool.on("connection", (connection) => {
