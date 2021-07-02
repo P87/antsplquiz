@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { AnswerSet, Question } from "../../../../types";
+import { formatDateToEnglish } from "../utils";
 
 interface FormProps {
   answerSets: AnswerSet[];
@@ -50,15 +51,7 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
         </div>
 
         {questions.activeQuestions.map((question) => {
-          const deadline = new Date(question.deadline);
-          const [month, day, year, hour, minutes, seconds] = [
-            deadline.getMonth(),
-            deadline.getDate(),
-            deadline.getFullYear(),
-            deadline.getHours(),
-            deadline.getMinutes(),
-            deadline.getSeconds(),
-          ];
+          const deadline = formatDateToEnglish(question.deadline);
 
           const type =
             question.answer_type ??
@@ -70,7 +63,7 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
             <div className="row">
               <div className="col">{question.question}</div>
               <div className="col">
-                {day}/{month}/{year} {hour}:{minutes}:{seconds}
+                {deadline}
               </div>
               <div className="col">{type}</div>
               <div className="col">{question.points}</div>
@@ -90,15 +83,7 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
         </div>
 
         {questions.pastQuestions.map((question) => {
-          const deadline = new Date(question.deadline);
-          const [month, day, year, hour, minutes, seconds] = [
-            deadline.getMonth(),
-            deadline.getDate(),
-            deadline.getFullYear(),
-            deadline.getHours(),
-            deadline.getMinutes(),
-            deadline.getSeconds(),
-          ];
+          const deadline = formatDateToEnglish(question.deadline);
 
           const type =
             question.answer_type ??
@@ -111,7 +96,7 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
               <div className="col">{question.question}</div>
               <div className="col">{question.correct_answer}</div>
               <div className="col">
-                {day}/{month}/{year} {hour}:{minutes}:{seconds}
+                {deadline}
               </div>
               <div className="col">{type}</div>
               <div className="col">{question.points}</div>

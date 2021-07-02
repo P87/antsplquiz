@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import QuestionsAdmin from "../components/admin/questions";
+import Questions from "../components/home/questions";
 
 const adminQuestionsContainer = document.getElementById("admin-questions");
 
@@ -18,4 +19,17 @@ async function renderQuestionsAdmin() {
     <QuestionsAdmin answerSets={answerSets} questions={questions} />,
     adminQuestionsContainer
   );
+}
+
+const questionsContainer = document.getElementById("questions-container");
+
+if (questionsContainer) {
+  renderActiveQuestions();
+}
+
+async function renderActiveQuestions() {
+  ReactDOM.render(
+    <Questions />,
+    questionsContainer
+  )
 }
