@@ -1,7 +1,7 @@
 export const formatDateToEnglish = (dateString: string) => {
   const deadline = new Date(dateString);
   const [month, day, year, hour, minutes, seconds] = [
-    deadline.getMonth().toString(),
+    (deadline.getMonth() + 1).toString(),
     deadline.getDate().toString(),
     deadline.getFullYear().toString(),
     deadline.getHours().toString(),
