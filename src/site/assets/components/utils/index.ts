@@ -9,4 +9,4 @@ export const formatDateToEnglish = (dateString: string) => {
     deadline.getSeconds(),
   ];
   return `${day}/${month}/${year} ${hour}:${minutes}:${seconds}`;
-}
+};

@@ -28,8 +28,5 @@ if (questionsContainer) {
 }
 
 async function renderActiveQuestions() {
-  ReactDOM.render(
-    <Questions />,
-    questionsContainer
-  )
+  ReactDOM.render(<Questions />, questionsContainer);
 }

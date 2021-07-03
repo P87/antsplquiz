@@ -32,3 +32,15 @@ export const insertOne = async (query: string, params: string[]) => {
     return false;
   }
 };
+
+export const convertDate = (date: Date): string => {
+  const [month, day, year, hour, minutes, seconds] = [
+    date.getMonth(),
+    date.getDate(),
+    date.getFullYear(),
+    date.getHours(),
+    date.getMinutes(),
+    date.getSeconds(),
+  ];
+  return `${year}-${month + 1}-${day} ${hour}:${minutes}:${seconds}`;
+};

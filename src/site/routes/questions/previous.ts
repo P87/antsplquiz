@@ -5,7 +5,7 @@ export default async (req: Request, res: Response) => {
   try {
     const date = mysql.convertDate(new Date());
     const questions = await mysql.query(
-      `SELECT * FROM \`questions\` WHERE \`deadline\` > "${date}"`,
+      `SELECT * FROM \`questions\` WHERE \`deadline\` < "${date}"`,
       []
     );
     if (!questions) {

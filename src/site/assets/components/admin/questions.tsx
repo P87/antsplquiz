@@ -62,9 +62,7 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
           return (
             <div className="row">
               <div className="col">{question.question}</div>
-              <div className="col">
-                {deadline}
-              </div>
+              <div className="col">{deadline}</div>
               <div className="col">{type}</div>
               <div className="col">{question.points}</div>
             </div>
@@ -95,9 +93,7 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
             <div className="row">
               <div className="col">{question.question}</div>
               <div className="col">{question.correct_answer}</div>
-              <div className="col">
-                {deadline}
-              </div>
+              <div className="col">{deadline}</div>
               <div className="col">{type}</div>
               <div className="col">{question.points}</div>
             </div>
