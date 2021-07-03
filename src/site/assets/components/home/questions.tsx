@@ -54,7 +54,7 @@ const Questions = (): JSX.Element | null => {
   };
 
   return (
-    <div>
+    <div className="p-1">
       <QuestionsNav
         onPreviousQuestionsClick={showPreviousQuestions}
         onActiveQuestionsClick={showActiveQuestions}
@@ -63,31 +63,28 @@ const Questions = (): JSX.Element | null => {
       {displayActiveQuestions ? (
         activeQuestions.length ? (
           <div>
-            <div className="row bg-primary p-1 pt-2 pb-2 border border-dark text-light mb-2">
-              <div className="col-5">
-                <strong>Question</strong>
-              </div>
-              <div className="col">
-                <strong>Points</strong>
-              </div>
-              <div className="col">
-                <strong>Deadline</strong>
-              </div>
-              <div className="col">
-                <strong>Action</strong>
-              </div>
-            </div>
             {activeQuestions.map((question) => (
-              <div className="row p-1 mt-1 mb-1 pt-2 border-bottom border-dark">
-                <div className="col-5">{question.question}</div>
-                <div className="col">{question.points}</div>
-                <div className="col">
-                  {formatDateToEnglish(question.deadline)}
+              <div className="mb-3">
+                <div className="row p-2 border bg-primary fw-bold text-light border-dark">
+                  <div className="col-10">Max Points</div>
+                  <div className="col-2 text-end">{question.points}</div>
                 </div>
-                <div className="col">
-                  <button type="button" className="btn btn-primary">
-                    Answer
-                  </button>
+                <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
+                  <div className="col-12">{question.question}</div>
+                </div>
+                <div className="row p-2 border border-top-0 fw-bold border-bottom-0 border-dark">
+                  <div className="col-12">
+                    Deadline: {formatDateToEnglish(question.deadline)}
+                  </div>
+                </div>
+                <div className="row p-2 border border-top-0 text-center border-dark">
+                  <div className="col-12">
+                    <div className="d-grid gap-2">
+                      <button className="btn btn-success" type="button">
+                        Answer
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -97,31 +94,28 @@ const Questions = (): JSX.Element | null => {
         )
       ) : previousQuestions.length ? (
         <div>
-          <div className="row bg-primary p-1 pt-2 pb-2 border border-dark text-light mb-2">
-            <div className="col-5">
-              <strong>Question</strong>
-            </div>
-            <div className="col">
-              <strong>Points</strong>
-            </div>
-            <div className="col">
-              <strong>Deadline</strong>
-            </div>
-            <div className="col">
-              <strong>Action</strong>
-            </div>
-          </div>
           {previousQuestions.map((question) => (
-            <div className="row p-1 mt-1 mb-1 pt-2 border-bottom border-dark">
-              <div className="col-5">{question.question}</div>
-              <div className="col">{question.points}</div>
-              <div className="col">
-                {formatDateToEnglish(question.deadline)}
+            <div className="mb-3">
+              <div className="row p-2 border bg-primary fw-bold text-light border-dark">
+                <div className="col-10">Max Points</div>
+                <div className="col-2 text-end">{question.points}</div>
               </div>
-              <div className="col">
-                <button type="button" className="btn btn-primary">
-                  Answer
-                </button>
+              <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
+                <div className="col-12">{question.question}</div>
+              </div>
+              <div className="row p-2 border border-top-0 fw-bold border-bottom-0 border-dark">
+                <div className="col-12">
+                  Deadline: {formatDateToEnglish(question.deadline)}
+                </div>
+              </div>
+              <div className="row p-2 border border-top-0 text-center border-dark">
+                <div className="col-12">
+                  <div className="d-grid gap-2">
+                    <button className="btn btn-success" type="button">
+                      Answer
+                    </button>
+                  </div>
+                </div>
               </div>
             </div>
           ))}
