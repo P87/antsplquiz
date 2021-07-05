@@ -6,6 +6,8 @@ import session from "express-session";
 import RedisConnect from "connect-redis";
 import routes from "./routes";
 import config from "./utils/config";
+import fs from "fs";
+import https from "https";
 
 const RedisStore = RedisConnect(session);
 
@@ -38,6 +40,17 @@ app.use(
 
 app.use("/", routes);
 
-app.listen(port, () => {
-  console.log(`Listening at http://localhost:${port}`);
-});
+if (process.env.NODE_ENV === "production") {
+ const httpsServer = https.createServer({
+   key: fs.readFileSync(config.ssl.key),
+   cert: fs.readFileSync(config.ssl.cert)
+ }, app);
+
+ httpsServer.listen(443, () => {
+   console.log(`Listening at https://localhost`);
+ });
+} else {
+  app.listen(port, () => {
+    console.log(`Listening at http://localhost:${port}`);
+  });
+}

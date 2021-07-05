@@ -16,5 +16,9 @@
     "user": "plquiz",
     "password": "changeme",
     "database": "antsplquiz"
+  },
+  "ssl": {
+    "key": "/location/to/key",
+    "cert": "/location/to/cert"
   }
 }

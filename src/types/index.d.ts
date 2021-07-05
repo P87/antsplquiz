@@ -14,6 +14,10 @@ export interface Config {
     password: string;
   };
   mysql: MySQLConfig;
+  ssl: {
+    key: string;
+    cert: string;
+  }
 }
 
 export interface MySQLConfig {
