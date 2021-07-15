@@ -73,6 +73,7 @@ export interface ActiveAnswer {
   [key: string]: {
     set_id: number;
     name: string;
+    answer: string;
   }[];
 }
 

@@ -91,7 +91,7 @@ const Questions = (): JSX.Element => {
                         <ul>
                           {activeAnswers[key] &&
                             Object.values(activeAnswers[key]).map((answer) => (
-                              <li>{answer.name}</li>
+                              <li>{answer.name || answer.answer}</li>
                             ))}
                         </ul>
                       </div>

@@ -25,8 +25,14 @@ export default async (req: Request, res: Response) => {
           ...as,
           [question.id]: [
             ...(as[question.id] ? as[question.id] : []),
-            ...(question.answer_set_id
-              ? [{ set_id: question.answer_set_id, name: question.user_answer }]
+            ...(question.answer_set_id || question.answer
+              ? [
+                  {
+                    set_id: question.answer_set_id,
+                    name: question.user_answer,
+                    answer: question.answer,
+                  },
+                ]
               : []),
           ],
         };

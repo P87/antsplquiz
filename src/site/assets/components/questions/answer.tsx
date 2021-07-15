@@ -37,8 +37,10 @@ const AnswerQuestion = (): JSX.Element => {
           setQuestion(result.question);
           setSetAnswers(result.setAnswers);
           setAnswer(
-            result.answers.map(
-              (answer: MySQLAnswer) => `${answer.answer_set_id}`
+            result.answers.map((answer: MySQLAnswer) =>
+              result.question.answer_set_id
+                ? `${answer.answer_set_id}`
+                : `${answer.answer}`
             )
           );
         }
@@ -170,13 +172,30 @@ const AnswerForm = ({
         );
       }
       break;
+    case "yesno":
+      toReturn.push(
+        <select
+          className="form-select form-select-lg mb-3"
+          aria-label="Select Yes or No"
+          onChange={handleFormChange.bind(this, 0)}
+        >
+          <option selected>Select an Answer</option>
+          <option value="yes" selected={answer[0] && answer[0] === "yes"}>
+            Yes
+          </option>
+          <option value="no" selected={answer[0] && answer[0] === "no"}>
+            No
+          </option>
+        </select>
+      );
+      break;
     case null:
       if (question.answer_set_id === ALL_TEAMS_TYPE && setAnswers) {
         for (let i = 0; i < question.answer_amount; i++) {
           toReturn.push(
             <select
               className="form-select form-select-lg mb-3"
-              aria-label=".form-select-lg example"
+              aria-label="Select a team"
               onChange={handleFormChange.bind(this, i)}
             >
               <option selected>Select a team</option>
