@@ -1,6 +1,6 @@
 export const formatDateToEnglish = (dateString: string) => {
   const deadline = new Date(dateString);
-  const [month, day, year, hour, minutes, seconds] = [
+  const [month, day, year, hour, minutes] = [
     (deadline.getMonth() + 1).toString(),
     deadline.getDate().toString(),
     deadline.getFullYear().toString(),
@@ -12,5 +12,5 @@ export const formatDateToEnglish = (dateString: string) => {
     month.length === 1 ? "0" + month : month
   }/${year} ${hour.length === 1 ? "0" + hour : hour}:${
     minutes.length === 1 ? "0" + minutes : minutes
-  }:${seconds.length === 1 ? "0" + seconds : seconds}`;
+  }`;
 };

@@ -32,6 +32,7 @@ CREATE TABLE IF NOT EXISTS `questions` (
 	`answer_set_id` INT,
 	`correct_answer_set_id` INT,
 	`answer_type` VARCHAR(15),
+	`answer_amount` INT NOT NULL,
 	`correct_answer` TEXT,
 	`deadline` TIMESTAMP NOT NULL,
 	`points` INT NOT NULL,
@@ -54,17 +55,33 @@ CREATE TABLE IF NOT EXISTS `answer_set_answers` (
 );
 CREATE TABLE IF NOT EXISTS `answers` (
 	`id` INT NOT NULL AUTO_INCREMENT,
-	`answer` TEXT,
-	`answer_id` INT,
+	`answer` VARCHAR(255),
+	`answer_set_id` INT,
+	`question_id` INT,
 	`user_id` INT NOT NULL,
+	`final_answer` BOOLEAN NOT NULL DEFAULT true,
+	`correct` BOOLEAN NOT NULL DEFAULT false,
 	`date_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`)
+);
+CREATE TABLE IF NOT EXISTS `questions_correct_answers` (
+    `question_id` INT NOT NULL,
+    `answer_set_answers_id` INT,
+    `correct_answer` TEXT
 );
 CREATE TABLE IF NOT EXISTS `standings` (
 	`id` INT NOT NULL AUTO_INCREMENT,
 	`standings` TEXT NOT NULL,
 	`date_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`)
+);
+CREATE TABLE IF NOT EXISTS `added_points` (
+	`id` INT NOT NULL AUTO_INCREMENT,
+	`user_id` INT NOT NULL,
+	`question_id` INT NOT NULL,
+	`points` INT NOT NULL,
+    `date_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (`id`)
 );
 
 INSERT IGNORE INTO `answer_sets` SET `name` = "All Teams";

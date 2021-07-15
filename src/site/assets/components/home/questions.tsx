@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Question } from "../../../../types";
+import { Question, ActiveQuestion, ActiveAnswer } from "../../../../types";
 import { formatDateToEnglish } from "../utils";
 
 interface NavProps {
@@ -8,28 +8,29 @@ interface NavProps {
   displayActiveQuestions: boolean;
 }
 
-const Questions = (): JSX.Element | null => {
-  const [hasInitialised, setInitialised] = useState(false);
-  const [activeQuestions, setActiveQuestions] = useState<Question[]>([]);
+const Questions = (): JSX.Element => {
+  const [activeQuestions, setActiveQuestions] = useState<ActiveQuestion>({});
+  const [activeAnswers, setActiveAnswers] = useState<ActiveAnswer>({});
   const [previousQuestions, setPreviousQuestions] = useState<Question[]>([]);
   const [displayActiveQuestions, setDisplayActiveQuestions] = useState(true);
 
   useEffect(() => {
-    setInitialised(true);
     async function getActiveQuestions() {
-      const questions = await fetch("/questions/active", {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-      });
-      setActiveQuestions(await questions.json());
+      const activeQuestions = await (
+        await fetch("/questions/active", {
+          method: "POST",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        })
+      ).json();
+
+      setActiveQuestions(activeQuestions.questions);
+      setActiveAnswers(activeQuestions.answers);
     }
-    if (!hasInitialised) {
-      getActiveQuestions();
-    }
-  });
+    getActiveQuestions();
+  }, []);
 
   const showPreviousQuestions = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -61,33 +62,57 @@ const Questions = (): JSX.Element | null => {
         displayActiveQuestions={displayActiveQuestions}
       />
       {displayActiveQuestions ? (
-        activeQuestions.length ? (
+        Object.keys(activeQuestions).length ? (
           <div>
-            {activeQuestions.map((question) => (
-              <div className="mb-3">
-                <div className="row p-2 border bg-primary fw-bold text-light border-dark">
-                  <div className="col-10">Max Points</div>
-                  <div className="col-2 text-end">{question.points}</div>
-                </div>
-                <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
-                  <div className="col-12">{question.question}</div>
-                </div>
-                <div className="row p-2 border border-top-0 fw-bold border-bottom-0 border-dark">
-                  <div className="col-12">
-                    Deadline: {formatDateToEnglish(question.deadline)}
+            {Object.keys(activeQuestions).map((key) => {
+              const hasAnswered = !!activeAnswers[key]?.length;
+              const question = activeQuestions[key];
+
+              return (
+                <div className="mb-3">
+                  <div className="row p-2 border bg-primary fw-bold text-light border-dark">
+                    <div className="col-10">Max Points</div>
+                    <div className="col-2 text-end">
+                      {question.points * question.answer_amount}
+                    </div>
                   </div>
-                </div>
-                <div className="row p-2 border border-top-0 text-center border-dark">
-                  <div className="col-12">
-                    <div className="d-grid gap-2">
-                      <button className="btn btn-success" type="button">
-                        Answer
-                      </button>
+                  <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
+                    <div className="col-12">{question.question}</div>
+                  </div>
+                  <div className="row p-2 border border-top-0 fw-bold border-bottom-0 border-dark">
+                    <div className="col-12">
+                      Deadline: {formatDateToEnglish(question.deadline)}
+                    </div>
+                  </div>
+                  {hasAnswered && (
+                    <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
+                      <div className="col-12">
+                        Your Answer:
+                        <ul>
+                          {activeAnswers[key] &&
+                            Object.values(activeAnswers[key]).map((answer) => (
+                              <li>{answer.name}</li>
+                            ))}
+                        </ul>
+                      </div>
+                    </div>
+                  )}
+                  <div className="row p-2 border border-top-0 text-center border-dark">
+                    <div className="col-12">
+                      <div className="d-grid gap-2">
+                        <a
+                          href={`/questions/answer/${question.id}`}
+                          className="btn btn-success"
+                          role="button"
+                        >
+                          {hasAnswered && "Edit"} Answer
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="col">No Active Questions</div>

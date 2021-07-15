@@ -59,11 +59,12 @@ routes.get("/get-questions", async (req, res) => {
 });
 
 routes.post("/add-question", async (req, res) => {
-  const { question, answerType, answerSetId, deadline, points } = req.body;
+  const { question, answerType, answerSetId, deadline, points, answerAmount } =
+    req.body;
   try {
     const insert = await mysql.insertOne(
-      "INSERT INTO `questions` SET `league_id` = 1, `question` = ?, `answer_set_id` = ?, `answer_type` = ?, `deadline` = ?, `points` = ?",
-      [question, answerSetId, answerType, deadline, points]
+      "INSERT INTO `questions` SET `league_id` = 1, `question` = ?, `answer_set_id` = ?, `answer_type` = ?, `deadline` = ?, `points` = ?, `answer_amount` = ?",
+      [question, answerSetId, answerType, deadline, points, answerAmount]
     );
 
     if (!insert) {

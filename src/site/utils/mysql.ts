@@ -12,7 +12,7 @@ pool.on("connection", (connection) => {
 
 export const query = async <T extends RowDataPacket>(
   query: string,
-  params: string[]
+  params: (string | number)[]
 ) => {
   try {
     const [rows]: [T[], FieldPacket[]] = await pool.query<T[]>(query, params);
@@ -23,7 +23,7 @@ export const query = async <T extends RowDataPacket>(
   }
 };
 
-export const insertOne = async (query: string, params: string[]) => {
+export const insertOne = async (query: string, params: (string | number)[]) => {
   try {
     const [rows] = await pool.query<ResultSetHeader>(query, params);
     return rows.affectedRows === 1;

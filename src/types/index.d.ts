@@ -17,7 +17,7 @@ export interface Config {
   ssl: {
     key: string;
     cert: string;
-  }
+  };
 }
 
 export interface MySQLConfig {
@@ -52,6 +52,39 @@ export interface Question {
   league_id: number;
   points: number;
   question: string;
+  name?: string;
+  answer_amount: number;
+}
+
+export interface ActiveQuestion {
+  [key: string]: {
+    id: number;
+    answer_amount: number;
+    answer_set_id: number;
+    answer_type: null | string;
+    deadline: string;
+    points: number;
+    question: string;
+    user_answer: string;
+  };
+}
+
+export interface ActiveAnswer {
+  [key: string]: {
+    set_id: number;
+    name: string;
+  }[];
+}
+
+interface QuestionAnswerSet extends RowDataPacket {
+  id: number;
+  question: string;
+  answer_type: string;
+  answer_set_id: number;
+  deadline: string;
+  points: number;
+  name: string;
+  answer_amount: number;
 }
 
 export interface MySQLUser extends RowDataPacket {
@@ -63,4 +96,18 @@ export interface MySQLUser extends RowDataPacket {
 
 export interface MySQLCount extends RowDataPacket {
   count: nunmner;
+}
+
+export interface MySQLSetAnswer extends RowDataPacket {
+  id: number;
+  answer: string;
+  set_id: number;
+}
+
+export interface MySQLAnswer extends RowDataPacket {
+  id: number;
+  answer: string;
+  question_id: number;
+  user_id: number;
+  date_added: string;
 }

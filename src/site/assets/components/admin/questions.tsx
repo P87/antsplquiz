@@ -22,6 +22,7 @@ interface FormState {
   deadlineHour: undefined | number;
   deadlineMinute: undefined | number;
   points: undefined | number;
+  answerAmount: number;
 }
 
 const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
@@ -114,6 +115,7 @@ const QuestionForm = ({ answerSets }: FormProps): JSX.Element => {
     deadlineHour: undefined,
     deadlineMinute: undefined,
     points: undefined,
+    answerAmount: 1,
   });
 
   const [resultState, setResultState] = useState<null | boolean>(null);
@@ -139,6 +141,7 @@ const QuestionForm = ({ answerSets }: FormProps): JSX.Element => {
       deadlineHour,
       deadlineMinute,
       points,
+      answerAmount,
     } = formData;
 
     const result = await (
@@ -154,6 +157,7 @@ const QuestionForm = ({ answerSets }: FormProps): JSX.Element => {
           answerSetId: isNaN(answerType as number) ? null : +answerType,
           deadline: `${deadlineYear}-${deadlineMonth}-${deadlineDay} ${deadlineHour}:${deadlineMinute}:00`,
           points,
+          answerAmount,
         }),
       })
     ).json();
@@ -265,6 +269,23 @@ const QuestionForm = ({ answerSets }: FormProps): JSX.Element => {
               placeholder="MM"
               onChange={handleFormChange}
               value={formData.deadlineMinute}
+            />
+          </div>
+        </div>
+      </div>
+      <div className="mb-3">
+        <div className="row">
+          <label htmlFor="answerAmount" className="col-sm-2 col-form-label">
+            How many answers for this question?
+          </label>
+          <div className="col-sm-10">
+            <input
+              type="number"
+              className="form-control"
+              id="answerAmount"
+              name="answerAmount"
+              onChange={handleFormChange}
+              value={formData.answerAmount}
             />
           </div>
         </div>
