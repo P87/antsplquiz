@@ -54,6 +54,15 @@ const Questions = (): JSX.Element => {
     setDisplayActiveQuestions(true);
   };
 
+  const hasUnansweredQuestions = Object.values(activeQuestions).some(
+    (question) => {
+      return (
+        (activeAnswers && !activeAnswers[question.id]) ||
+        !activeAnswers[question.id].length
+      );
+    }
+  );
+
   return (
     <div className="p-1">
       <QuestionsNav
@@ -61,6 +70,11 @@ const Questions = (): JSX.Element => {
         onActiveQuestionsClick={showActiveQuestions}
         displayActiveQuestions={displayActiveQuestions}
       />
+      {hasUnansweredQuestions && (
+        <div className="alert alert-warning text-center">
+          You have questions that need answering!
+        </div>
+      )}
       {displayActiveQuestions ? (
         Object.keys(activeQuestions).length ? (
           <div>
