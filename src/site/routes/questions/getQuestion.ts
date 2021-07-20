@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as mysql from "../../utils/mysql";
 import { MySQLAnswer, MySQLSetAnswer, QuestionAnswerSet } from "../../../types";
+import { ALL_PLAYERS_TYPE } from "../../constants";
 
 export default async (req: Request, res: Response) => {
   try {
@@ -24,7 +25,7 @@ export default async (req: Request, res: Response) => {
       return res.json({ success: false });
     }
 
-    if (question[0].answer_set_id) {
+    if (question[0].answer_set_id && question[0].answer_set_id !== ALL_PLAYERS_TYPE) {
       setAnswers = await mysql.query<MySQLSetAnswer>(
         "SELECT * FROM `answer_set_answers` WHERE `set_id` = ?",
         [question[0].answer_set_id]

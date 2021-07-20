@@ -5,6 +5,8 @@ import CorrectScoreForm from "./correctScoreForm";
 import YesNoForm from "./yesNoForm";
 import NumberForm from "./numberForm";
 import TeamsForm from "./teamsForm";
+import PlayersForm from "./playersForm";
+import * as Constants from "../../../constants";
 
 interface FormProps {
   question: Question;
@@ -12,8 +14,6 @@ interface FormProps {
   setAnswers: MySQLSetAnswer[] | undefined;
   savedAnswer: MySQLAnswer[] | undefined;
 }
-
-const ALL_TEAMS_TYPE = 1;
 
 const AnswerQuestion = (): JSX.Element => {
   const [question, setQuestion] = useState<undefined | Question>();
@@ -123,7 +123,7 @@ const AnswerForm = ({
         />
       );
     case null:
-      if (question.answer_set_id === ALL_TEAMS_TYPE && setAnswers) {
+      if (question.answer_set_id === Constants.ALL_TEAMS_TYPE && setAnswers) {
         return (
           <TeamsForm
             question={question}
@@ -132,6 +132,8 @@ const AnswerForm = ({
             setAnswers={setAnswers}
           />
         );
+      } else if (question.answer_set_id === Constants.ALL_PLAYERS_TYPE) {
+        return <PlayersForm question={question} setErrorMessage={setErrorMessage} />
       }
       break;
   }
