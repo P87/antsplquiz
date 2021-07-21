@@ -10,8 +10,7 @@ export default async (req: Request, res: Response) => {
     if (!players) {
       throw new Error("Error getting active questions");
     }
-    return res.json({success: true,
-      players});
+    return res.json({ success: true, players });
   } catch (err) {
     console.error("Error getting active questions", err);
     res.json({ success: false });

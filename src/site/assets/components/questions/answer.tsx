@@ -7,12 +7,13 @@ import NumberForm from "./numberForm";
 import TeamsForm from "./teamsForm";
 import PlayersForm from "./playersForm";
 import * as Constants from "../../../constants";
+import { ALL_PLAYERS_TYPE } from "../../../constants";
 
 interface FormProps {
   question: Question;
   setErrorMessage: Dispatch<React.SetStateAction<string>>;
-  setAnswers: MySQLSetAnswer[] | undefined;
-  savedAnswer: MySQLAnswer[] | undefined;
+  setAnswers?: MySQLSetAnswer[];
+  savedAnswer?: MySQLAnswer[] | MySQLSetAnswer[];
 }
 
 const AnswerQuestion = (): JSX.Element => {
@@ -40,13 +41,17 @@ const AnswerQuestion = (): JSX.Element => {
           setIsLoading(false);
           setQuestion(result.question);
           setSetAnswers(result.setAnswers);
-          setAnswer(
-            result.answers.map((answer: MySQLAnswer) =>
-              result.question.answer_set_id
-                ? `${answer.answer_set_id}`
-                : `${answer.answer}`
-            )
-          );
+          if (result.question.answer_set_id === ALL_PLAYERS_TYPE) {
+            setAnswer(result.answers);
+          } else {
+            setAnswer(
+              result.answers.map((a: MySQLAnswer) =>
+                result.question.answer_set_id
+                  ? `${a.answer_set_id}`
+                  : `${a.answer}`
+              )
+            );
+          }
         }
       })
       .catch(() => {
@@ -103,7 +108,7 @@ const AnswerForm = ({
         <NumberForm
           question={question}
           setErrorMessage={setErrorMessage}
-          savedAnswer={savedAnswer}
+          savedAnswer={savedAnswer as MySQLAnswer[]}
         />
       );
     case "yesno":
@@ -111,7 +116,7 @@ const AnswerForm = ({
         <YesNoForm
           question={question}
           setErrorMessage={setErrorMessage}
-          savedAnswer={savedAnswer}
+          savedAnswer={savedAnswer as MySQLAnswer[]}
         />
       );
     case "score":
@@ -119,7 +124,7 @@ const AnswerForm = ({
         <CorrectScoreForm
           question={question}
           setErrorMessage={setErrorMessage}
-          savedAnswer={savedAnswer}
+          savedAnswer={savedAnswer as MySQLAnswer[]}
         />
       );
     case null:
@@ -128,12 +133,19 @@ const AnswerForm = ({
           <TeamsForm
             question={question}
             setErrorMessage={setErrorMessage}
-            savedAnswer={savedAnswer}
+            savedAnswer={savedAnswer as MySQLAnswer[]}
             setAnswers={setAnswers}
           />
         );
       } else if (question.answer_set_id === Constants.ALL_PLAYERS_TYPE) {
-        return <PlayersForm question={question} setErrorMessage={setErrorMessage} />
+        return (
+          <PlayersForm
+            question={question}
+            setErrorMessage={setErrorMessage}
+            setAnswers={setAnswers}
+            savedAnswer={savedAnswer as MySQLSetAnswer[]}
+          />
+        );
       }
       break;
   }
