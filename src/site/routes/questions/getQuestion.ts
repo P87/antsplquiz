@@ -42,8 +42,10 @@ export default async (req: Request, res: Response) => {
     ) {
       const inString = answers.map((answer) => answer.answer_set_id);
       setAnswers = await mysql.query<MySQLSetAnswer>(
-        "SELECT * FROM `answer_set_answers` WHERE `id` = ?",
-        [inString.join(",")]
+        "SELECT * FROM `answer_set_answers` WHERE `id` IN  (?)",
+        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+        // @ts-ignore
+        [inString]
       );
     }
 
