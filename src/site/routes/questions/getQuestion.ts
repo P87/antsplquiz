@@ -38,7 +38,8 @@ export default async (req: Request, res: Response) => {
       }
     } else if (
       question[0].answer_set_id &&
-      question[0].answer_set_id === ALL_PLAYERS_TYPE
+      question[0].answer_set_id === ALL_PLAYERS_TYPE &&
+      answers.length
     ) {
       const inString = answers.map((answer) => answer.answer_set_id);
       setAnswers = await mysql.query<MySQLSetAnswer>(

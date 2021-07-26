@@ -42,9 +42,9 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
           New Question
         </button>
       )}
-      <h2>Active Questions</h2>
+      <h2 className="mb-3 mt-5">Active Questions</h2>
       <div>
-        <div className="row">
+        <div className="row border-bottom border-dark p-2 bg-secondary fw-bold text-light">
           <div className="col">Question</div>
           <div className="col">Deadline</div>
           <div className="col">Type</div>
@@ -61,7 +61,7 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
             )?.name;
 
           return (
-            <div className="row">
+            <div className="row border border-dark border-top-0 p-2">
               <div className="col">{question.question}</div>
               <div className="col">{deadline}</div>
               <div className="col">{type}</div>
@@ -71,9 +71,9 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
         })}
       </div>
 
-      <h2>Previous Questions</h2>
+      <h2 className="mb-3 mt-5">Previous Questions</h2>
       <div>
-        <div className="row">
+        <div className="row border-bottom border-dark p-2 bg-secondary fw-bold text-light">
           <div className="col">Question</div>
           <div className="col">Answer</div>
           <div className="col">Deadline</div>
@@ -91,7 +91,7 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
             )?.name;
 
           return (
-            <div className="row">
+            <div className="row border border-dark border-top-0 p-2">
               <div className="col">{question.question}</div>
               <div className="col">{question.correct_answer}</div>
               <div className="col">{deadline}</div>

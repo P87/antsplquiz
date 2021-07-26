@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Question, ActiveQuestion, ActiveAnswer } from "../../../../types";
+import { ActiveQuestion, ActiveAnswer } from "../../../../types";
 import { formatDateToEnglish } from "../utils";
 
 interface NavProps {
@@ -11,12 +11,15 @@ interface NavProps {
 const Questions = (): JSX.Element => {
   const [activeQuestions, setActiveQuestions] = useState<ActiveQuestion>({});
   const [activeAnswers, setActiveAnswers] = useState<ActiveAnswer>({});
-  const [previousQuestions, setPreviousQuestions] = useState<Question[]>([]);
+  const [previousQuestions, setPreviousQuestions] = useState<ActiveQuestion>(
+    {}
+  );
+  const [previousAnswers, setPreviousAnswers] = useState<ActiveAnswer>({});
   const [displayActiveQuestions, setDisplayActiveQuestions] = useState(true);
 
   useEffect(() => {
     async function getActiveQuestions() {
-      const activeQuestions = await (
+      const activeQs = await (
         await fetch("/questions/active", {
           method: "POST",
           headers: {
@@ -26,26 +29,29 @@ const Questions = (): JSX.Element => {
         })
       ).json();
 
-      setActiveQuestions(activeQuestions.questions);
-      setActiveAnswers(activeQuestions.answers);
+      setActiveQuestions(activeQs.questions);
+      setActiveAnswers(activeQs.answers);
     }
     getActiveQuestions();
   }, []);
 
   const showPreviousQuestions = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    if (previousQuestions.length) {
+    if (Object.keys(previousQuestions).length) {
       setDisplayActiveQuestions(false);
       return;
     }
-    const questions = await fetch("/questions/previous", {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-    });
-    setPreviousQuestions(await questions.json());
+    const previousQs = await (
+      await fetch("/questions/previous", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      })
+    ).json();
+    setPreviousQuestions(previousQs.questions);
+    setPreviousAnswers(previousQs.answers);
     setDisplayActiveQuestions(false);
   };
 
@@ -131,33 +137,48 @@ const Questions = (): JSX.Element => {
         ) : (
           <div className="col">No Active Questions</div>
         )
-      ) : previousQuestions.length ? (
+      ) : Object.keys(previousQuestions).length ? (
         <div>
-          {previousQuestions.map((question) => (
-            <div className="mb-3">
-              <div className="row p-2 border bg-primary fw-bold text-light border-dark">
-                <div className="col-10">Max Points</div>
-                <div className="col-2 text-end">{question.points}</div>
-              </div>
-              <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
-                <div className="col-12">{question.question}</div>
-              </div>
-              <div className="row p-2 border border-top-0 fw-bold border-bottom-0 border-dark">
-                <div className="col-12">
-                  Deadline: {formatDateToEnglish(question.deadline)}
-                </div>
-              </div>
-              <div className="row p-2 border border-top-0 text-center border-dark">
-                <div className="col-12">
-                  <div className="d-grid gap-2">
-                    <button className="btn btn-success" type="button">
-                      Answer
-                    </button>
+          {Object.keys(previousQuestions).map((key) => {
+            const hasAnswered = !!previousAnswers[key]?.length;
+            const question = previousQuestions[key];
+
+            return (
+              <div className="mb-3">
+                <div className="row p-2 border bg-primary fw-bold text-light border-dark">
+                  <div className="col-10">Max Points</div>
+                  <div className="col-2 text-end">
+                    {question.points * question.answer_amount}
                   </div>
                 </div>
+                <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
+                  <div className="col-12">{question.question}</div>
+                </div>
+                <div className="row p-2 border border-top-0 fw-bold border-bottom-0 border-dark">
+                  <div className="col-12">
+                    Deadline: {formatDateToEnglish(question.deadline)}
+                  </div>
+                </div>
+                <div className="row p-2 border border-top-0 border-dark">
+                  {hasAnswered ? (
+                    <div className="col-12">
+                      Your Answer:
+                      <ul>
+                        {previousAnswers[key] &&
+                          Object.values(previousAnswers[key]).map((answer) => (
+                            <li>{answer.name || answer.answer}</li>
+                          ))}
+                      </ul>
+                    </div>
+                  ) : (
+                    <div className="alert alert-danger">
+                      We don't have an answer from you for this question
+                    </div>
+                  )}
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <div className="col">No Previous Questions</div>
