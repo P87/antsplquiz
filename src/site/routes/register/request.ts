@@ -5,27 +5,25 @@ import config from "../../utils/config";
 import { Request, Response } from "express";
 
 export default async (req: Request, res: Response) => {
-  const {
-    username,
-    display_name,
-    email,
-    password,
-    confirm_password,
-    leagueCode,
-  } = req.body;
+  const { username, display_name, email, password, confirm_password } =
+    req.body;
 
   if (
-    [
-      username,
-      display_name,
-      email,
-      password,
-      confirm_password,
-      leagueCode,
-    ].some((field) => !field)
+    [username, display_name, email, password, confirm_password].some(
+      (field) => !field
+    )
   ) {
     return res.render("register", {
       errorMessage: "All fields are required",
+      ...req.body,
+      csrfToken: req.csrfToken(),
+    });
+  }
+
+  if (password !== confirm_password) {
+    return res.render("register", {
+      errorMessage:
+        "Your password confirmation did not match the first password",
       ...req.body,
       csrfToken: req.csrfToken(),
     });

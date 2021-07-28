@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import * as mysql from "../../utils/mysql";
 
 const routes = Router();
@@ -8,6 +8,32 @@ routes.get("/", (req, res) => {
     section: "admin",
     isAdmin: req.session.isAdmin,
   });
+});
+
+routes.get("/edit/:questionId", (req: Request, res: Response) => {
+  res.render("admin/editQuestion", {
+    section: "admin",
+    isAdmin: req.session.isAdmin,
+  });
+});
+
+routes.post("/edit/:questionId", async (req: Request, res: Response) => {
+  const { question, deadline, points } = req.body;
+  try {
+    const update = await mysql.query(
+      "UPDATE`questions` SET `question` = ?, `deadline` = ?, `points` = ? WHERE `id` = ? LIMIT 1",
+      [question, deadline, points, req.params.questionId]
+    );
+
+    if (!update) {
+      return res.json({ success: false });
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error("Error updating question", err);
+    res.json({ success: false });
+  }
 });
 
 routes.get("/answer-sets", async (req, res) => {
@@ -24,16 +50,7 @@ routes.get("/answer-sets", async (req, res) => {
 });
 
 routes.get("/get-questions", async (req, res) => {
-  const now = new Date();
-  const [month, day, year, hour, minutes, seconds] = [
-    now.getMonth(),
-    now.getDate(),
-    now.getFullYear(),
-    now.getHours(),
-    now.getMinutes(),
-    now.getSeconds(),
-  ];
-  const date = `${year}-${month + 1}-${day} ${hour}:${minutes}:${seconds}`;
+  const date = mysql.convertDate(new Date());
 
   try {
     // @todo some pagination

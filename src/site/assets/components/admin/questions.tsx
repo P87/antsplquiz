@@ -49,6 +49,7 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
           <div className="col">Deadline</div>
           <div className="col">Type</div>
           <div className="col">Points</div>
+          <div className="col">Action</div>
         </div>
 
         {questions.activeQuestions.map((question) => {
@@ -66,6 +67,14 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
               <div className="col">{deadline}</div>
               <div className="col">{type}</div>
               <div className="col">{question.points}</div>
+              <div className="col">
+                <a
+                  className="btn btn-sm btn-primary"
+                  href={`/admin/questions/edit/${question.id}`}
+                >
+                  Edit
+                </a>
+              </div>
             </div>
           );
         })}
@@ -79,6 +88,7 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
           <div className="col">Deadline</div>
           <div className="col">Type</div>
           <div className="col">Points</div>
+          <div className="col">Action</div>
         </div>
 
         {questions.pastQuestions.map((question) => {
@@ -97,6 +107,14 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
               <div className="col">{deadline}</div>
               <div className="col">{type}</div>
               <div className="col">{question.points}</div>
+              <div className="col">
+                <a
+                  className="btn btn-sm btn-primary"
+                  href={`/admin/questions/edit/${question.id}`}
+                >
+                  Edit
+                </a>
+              </div>
             </div>
           );
         })}

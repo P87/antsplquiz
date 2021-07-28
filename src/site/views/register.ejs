@@ -34,10 +34,6 @@
                         <input type="email" class="form-control" id="email" name="email" value="<%= locals.email ? locals.email : '' %>" placeholder="Email">
                         <label for="email" class="form-label">Email</label>
                     </div>
-                    <div class="mb-3 form-floating">
-                        <input type="text" class="form-control" id="leagueCode" name="leagueCode" value="<%= locals.leagueCode ? locals.leagueCode : '' %>" placeholder="League Code">
-                        <label for="leagueCode" class="form-label">League Code</label>
-                    </div>
                     <input type="hidden" name="_csrf" value="<%= csrfToken %>" />
                     <button type="submit" class="btn btn-primary">Register</button>
                 </form>

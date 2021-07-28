@@ -1,7 +1,7 @@
 import { Router } from "express";
 import active from "./active";
 import previous from "./previous";
-import getQuestion from "./getQuestion";
+import getQuestion from "./get-question";
 import answer from "./answer";
 import setCorrectScoreAnswer from "./set-correct-score-answer";
 import setYesNopAnswer from "./set-yes-no-answer";
