@@ -132,6 +132,7 @@ const EditQuestion: React.FunctionComponent = () => {
           Error updating question. Please try again.
         </div>
       )}
+      {errorMessage && <div className="alert alert-danger">{errorMessage}</div>}
       <div className="mb-3">
         <label htmlFor="question" className="form-label">
           Question

@@ -59,7 +59,7 @@ export default async (req: Request, res: Response) => {
       return res.redirect("/");
     }
   } catch (err) {
-    res.render("login", {
+    return res.render("login", {
       errorMessage: "Something went wrong, please try again",
       ...req.body,
       csrfToken: req.csrfToken(),

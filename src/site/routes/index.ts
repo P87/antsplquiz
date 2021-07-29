@@ -8,6 +8,8 @@ import logout from "./logout";
 import home from "./home";
 import login from "./login";
 import questions from "./questions";
+import cookiesPolicy from "./cookies-policy";
+import privacyPolicy from "./privacy-policy";
 
 const routes = Router();
 const csrfProtection = csurf();
@@ -15,6 +17,10 @@ const csrfProtection = csurf();
 routes.get("/", csrfProtection as any, home);
 
 routes.post("/", csrfProtection as any, login);
+
+routes.get("/cookie-policy", cookiesPolicy);
+
+routes.get("/privacy-policy", privacyPolicy);
 
 routes.use("/register", register);
 

@@ -187,6 +187,8 @@ const QuestionForm = ({ answerSets }: FormProps): JSX.Element => {
     }
   };
 
+  const currentTime = new Date();
+
   return (
     <form onSubmit={handleFormSubmit}>
       {resultState === true && (
@@ -235,6 +237,13 @@ const QuestionForm = ({ answerSets }: FormProps): JSX.Element => {
             <option value="leaguetable">League Table</option>
           </optgroup>
         </select>
+      </div>
+      <div className="mb-3">
+        <div className="alert alert-info">
+          The Current Time Is: {currentTime.getUTCHours() < 9 && "0"}
+          {currentTime.getUTCHours()}:{currentTime.getUTCMinutes() < 9 && "0"}
+          {currentTime.getUTCMinutes()}
+        </div>
       </div>
       <div className="mb-3">
         <label className="form-label">Deadline</label>

@@ -6,6 +6,6 @@ export default (req: Request, res: Response) => {
       console.error("Error logging user out", err);
       throw new Error("Error logging user out");
     }
-    res.redirect("/");
+    return res.redirect("/");
   });
 };
