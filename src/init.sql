@@ -86,3 +86,4 @@ CREATE TABLE IF NOT EXISTS `added_points` (
 
 INSERT IGNORE INTO `answer_sets` SET `name` = "All Teams";
 INSERT IGNORE INTO `answer_sets` SET `name` = "All Players";
+INSERT IGNORE INTO `answer_sets` SET `name` = "All Managers";

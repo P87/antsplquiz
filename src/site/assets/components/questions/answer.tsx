@@ -8,6 +8,7 @@ import TeamsForm from "./teamsForm";
 import PlayersForm from "./playersForm";
 import * as Constants from "../../../constants";
 import { ALL_PLAYERS_TYPE } from "../../../constants";
+import ManagersForm from "./managersForm";
 
 interface FormProps {
   question: Question;
@@ -144,6 +145,15 @@ const AnswerForm = ({
             setErrorMessage={setErrorMessage}
             setAnswers={setAnswers}
             savedAnswer={savedAnswer as MySQLSetAnswer[]}
+          />
+        );
+      } else if (question.answer_set_id === Constants.ALL_MANAGERS_TYPE) {
+        return (
+          <ManagersForm
+            question={question}
+            setErrorMessage={setErrorMessage}
+            setAnswers={setAnswers}
+            savedAnswer={savedAnswer as MySQLAnswer[]}
           />
         );
       }

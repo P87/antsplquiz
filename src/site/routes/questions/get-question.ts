@@ -25,29 +25,24 @@ export default async (req: Request, res: Response) => {
       return res.json({ success: false });
     }
 
-    if (
-      question[0].answer_set_id &&
-      question[0].answer_set_id !== ALL_PLAYERS_TYPE
-    ) {
-      setAnswers = await mysql.query<MySQLSetAnswer>(
-        "SELECT * FROM `answer_set_answers` WHERE `set_id` = ?",
-        [question[0].answer_set_id]
-      );
-      if (!setAnswers || !setAnswers.length) {
-        return res.json({ success: false });
+    if (question[0].answer_set_id) {
+      if (question[0].answer_set_id === ALL_PLAYERS_TYPE) {
+        const inString = answers.map((answer) => answer.answer_set_id);
+        setAnswers = await mysql.query<MySQLSetAnswer>(
+          "SELECT * FROM `answer_set_answers` WHERE `id` IN  (?)",
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          [inString]
+        );
+      } else {
+        setAnswers = await mysql.query<MySQLSetAnswer>(
+          "SELECT * FROM `answer_set_answers` WHERE `set_id` = ?",
+          [question[0].answer_set_id]
+        );
+        if (!setAnswers || !setAnswers.length) {
+          return res.json({ success: false });
+        }
       }
-    } else if (
-      question[0].answer_set_id &&
-      question[0].answer_set_id === ALL_PLAYERS_TYPE &&
-      answers.length
-    ) {
-      const inString = answers.map((answer) => answer.answer_set_id);
-      setAnswers = await mysql.query<MySQLSetAnswer>(
-        "SELECT * FROM `answer_set_answers` WHERE `id` IN  (?)",
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        [inString]
-      );
     }
 
     return res.json({

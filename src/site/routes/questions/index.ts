@@ -9,6 +9,7 @@ import setNumberAnswer from "./set-number-answer";
 import SetTeamsAnswer from "./set-teams-asnwer";
 import PlayerSearch from "./player-search";
 import SetPlayersAnswer from "./set-players-answer";
+import SetManagersAnswer from "./set-managers-answer";
 
 const routes = Router();
 
@@ -22,5 +23,6 @@ routes.post("/set-number-answer/:questionId", setNumberAnswer);
 routes.post("/set-teams-answer/:questionId", SetTeamsAnswer);
 routes.post("/player-search", PlayerSearch);
 routes.post("/set-players-answer/:questionId", SetPlayersAnswer);
+routes.post("/set-managers-answer/:questionId", SetManagersAnswer);
 
 export default routes;
