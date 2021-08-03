@@ -142,10 +142,13 @@ const Questions = (): JSX.Element => {
           {Object.keys(previousQuestions).map((key) => {
             const hasAnswered = !!previousAnswers[key]?.length;
             const question = previousQuestions[key];
+            const correct = hasAnswered &&
+              previousAnswers[key] &&
+              Object.values(previousAnswers[key]).every((answer) => answer.correct);
 
             return (
               <div className="mb-3">
-                <div className="row p-2 border bg-primary fw-bold text-light border-dark">
+                <div className={`row p-2 border ${correct ? "bg-success" : "bg-primary"} fw-bold text-light border-dark`}>
                   <div className="col-10">Max Points</div>
                   <div className="col-2 text-end">
                     {question.points * question.answer_amount}
@@ -161,6 +164,7 @@ const Questions = (): JSX.Element => {
                 </div>
                 <div className="row p-2 border border-top-0 border-dark">
                   {hasAnswered ? (
+                    <>
                     <div className="col-12">
                       Your Answer:
                       <ul>
@@ -170,6 +174,10 @@ const Questions = (): JSX.Element => {
                           ))}
                       </ul>
                     </div>
+                    { correct && (<div className="col-12">
+                        <div className="alert alert-success">Nice one! You got this question right</div>
+                      </div>) }
+                    </>
                   ) : (
                     <div className="alert alert-danger">
                       We don't have an answer from you for this question

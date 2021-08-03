@@ -2,15 +2,15 @@ import { MySQLAnswer, Question } from "../../../../types";
 import React, { Dispatch, useEffect, useState } from "react";
 
 interface Props {
-  question: Question;
   setErrorMessage: Dispatch<React.SetStateAction<string>>;
   savedAnswer?: MySQLAnswer[];
+  submitUrl: string;
 }
 
 const NumberForm = ({
-  question,
   setErrorMessage,
   savedAnswer,
+  submitUrl,
 }: Props): JSX.Element => {
   const [answer, setAnswer] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -29,7 +29,7 @@ const NumberForm = ({
   };
 
   const handleSubmit = () => {
-    fetch(`/questions/set-yes-no-answer/${question.id}`, {
+    fetch(submitUrl, {
       method: "POST",
       headers: {
         Accept: "application/json",

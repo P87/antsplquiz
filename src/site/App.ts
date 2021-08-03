@@ -8,6 +8,7 @@ import routes from "./routes";
 import config from "./utils/config";
 import fs from "fs";
 import https from "https";
+import logger from "./utils/logger";
 
 const RedisStore = RedisConnect(session);
 
@@ -50,10 +51,10 @@ if (process.env.NODE_ENV === "production") {
   );
 
   httpsServer.listen(443, () => {
-    console.log(`Listening at https://localhost`);
+    logger.info(`Listening at https://localhost`);
   });
 } else {
   app.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}`);
+    logger.info(`Listening at http://localhost:${port}`);
   });
 }

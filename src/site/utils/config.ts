@@ -1,6 +1,7 @@
 import defaultConfig from "../../config.json";
 import fs from "fs";
 import { Config } from "../../types";
+import logger from "./logger";
 
 const config = process.env.CONFIG_OVERRIDE
   ? getEnvironmentConfig()
@@ -16,10 +17,10 @@ function getEnvironmentConfig(): Config {
       ...defaultConfig,
       ...JSON.parse(fileConfig),
     };
-    console.log("Successfully read config from process.env");
+    logger.info("Successfully read config from process.env");
     return compiledConfig;
   } catch (err) {
-    console.error("Error reading config file", err);
+    logger.error("Error reading config file", { err });
     throw new Error("Error reading config file");
   }
 }

@@ -3,6 +3,7 @@ import { MySQLCount } from "../../../types";
 import crypto from "crypto";
 import config from "../../utils/config";
 import { Request, Response } from "express";
+import logger from "../../utils/logger";
 
 export default async (req: Request, res: Response) => {
   const { username, display_name, email, password, confirm_password } =
@@ -54,7 +55,7 @@ export default async (req: Request, res: Response) => {
       });
     }
   } catch (err) {
-    console.error("Error checking against existing user", err);
+    logger.error("Error checking against existing user", { err });
     return res.render("register", {
       errorMessage:
         "An error occurred processing your request. Please try again.",

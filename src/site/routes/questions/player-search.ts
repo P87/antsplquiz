@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as mysql from "../../utils/mysql";
+import logger from "../../utils/logger";
 
 export default async (req: Request, res: Response) => {
   try {
@@ -12,7 +13,7 @@ export default async (req: Request, res: Response) => {
     }
     return res.json({ success: true, players });
   } catch (err) {
-    console.error("Error getting active questions", err);
+    logger.error("Error getting active questions", { err });
     res.json({ success: false });
   }
 };

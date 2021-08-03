@@ -74,6 +74,7 @@ export interface ActiveAnswer {
     set_id: number;
     name: string;
     answer: string;
+    correct: boolean;
   }[];
 }
 

@@ -97,7 +97,7 @@ const AnswerQuestion = (): JSX.Element => {
   );
 };
 
-const AnswerForm = ({
+export const AnswerForm = ({
   question,
   setErrorMessage,
   setAnswers,
@@ -107,9 +107,9 @@ const AnswerForm = ({
     case "number":
       return (
         <NumberForm
-          question={question}
           setErrorMessage={setErrorMessage}
           savedAnswer={savedAnswer as MySQLAnswer[]}
+          submitUrl={`/questions/set-number-answer/${question.id}`}
         />
       );
     case "yesno":

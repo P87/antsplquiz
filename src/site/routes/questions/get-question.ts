@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import * as mysql from "../../utils/mysql";
 import { MySQLAnswer, MySQLSetAnswer, QuestionAnswerSet } from "../../../types";
 import { ALL_PLAYERS_TYPE } from "../../constants";
+import logger from "../../utils/logger";
 
 export default async (req: Request, res: Response) => {
   try {
@@ -52,7 +53,7 @@ export default async (req: Request, res: Response) => {
       setAnswers,
     });
   } catch (err) {
-    console.error("Error getting active questions", err);
+    logger.error("Error getting active questions", { err });
     res.json({ success: false });
   }
 };

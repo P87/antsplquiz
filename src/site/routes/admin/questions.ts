@@ -1,5 +1,6 @@
 import { Request, Response, Router } from "express";
 import * as mysql from "../../utils/mysql";
+import logger from "../../utils/logger";
 
 const routes = Router();
 
@@ -12,6 +13,13 @@ routes.get("/", (req, res) => {
 
 routes.get("/edit/:questionId", (req: Request, res: Response) => {
   res.render("admin/editQuestion", {
+    section: "admin",
+    isAdmin: req.session.isAdmin,
+  });
+});
+
+routes.get("/set-correct-answer/:questionId", (req: Request, res: Response) => {
+  res.render("admin/setCorrectAnswer", {
     section: "admin",
     isAdmin: req.session.isAdmin,
   });
@@ -31,12 +39,12 @@ routes.post("/edit/:questionId", async (req: Request, res: Response) => {
 
     res.json({ success: true });
   } catch (err) {
-    console.error("Error updating question", err);
+    logger.error("Error updating question", err);
     res.json({ success: false });
   }
 });
 
-routes.get("/answer-sets", async (req, res) => {
+routes.get("/answer-sets", async (req: Request, res: Response) => {
   try {
     const sets = await mysql.query("SELECT * FROM `answer_sets`", []);
     if (!sets) {
@@ -44,12 +52,12 @@ routes.get("/answer-sets", async (req, res) => {
     }
     res.json(sets);
   } catch (err) {
-    console.error("Error getting asnwer sets", err);
+    logger.error("Error getting asnwer sets", err);
     throw new Error("Error getting answer sets");
   }
 });
 
-routes.get("/get-questions", async (req, res) => {
+routes.get("/get-questions", async (req: Request, res: Response) => {
   const date = mysql.convertDate(new Date());
 
   try {
@@ -70,12 +78,12 @@ routes.get("/get-questions", async (req, res) => {
     }
     return res.json({ activeQuestions, pastQuestions });
   } catch (err) {
-    console.error("Error getting questions", err);
+    logger.error("Error getting questions", err);
     throw new Error("Error getting questions");
   }
 });
 
-routes.post("/add-question", async (req, res) => {
+routes.post("/add-question", async (req: Request, res: Response) => {
   const { question, answerType, answerSetId, deadline, points, answerAmount } =
     req.body;
 
@@ -91,9 +99,42 @@ routes.post("/add-question", async (req, res) => {
 
     res.json({ success: true });
   } catch (err) {
-    console.error("Error adding new question", err);
+    logger.error("Error adding new question", err);
     res.json({ success: false });
   }
 });
+
+routes.post(
+  "/set-correct-number-answer/:questionId",
+  async (req: Request, res: Response) => {
+    const { answer } = req.body;
+    const questionId = +req.params.questionId;
+
+    try {
+      if (
+        !(await mysql.query(
+          "UPDATE `answers` SET `correct` = true WHERE `question_id` = ? AND `final_answer` = 1 AND answer = ?",
+          [questionId, answer]
+        ))
+      ) {
+        return res.json({ success: false });
+      }
+
+      if (
+        !(await mysql.insertOne(
+          "INSERT INTO `questions_correct_answers` SET `question_id` = ?, `correct_answer` = ?",
+          [questionId, answer]
+        ))
+      ) {
+        return res.json({ success: false });
+      }
+
+      return res.json({ success: true });
+    } catch (err) {
+      logger.error("Error adding correct number answer");
+      res.json({ success: false });
+    }
+  }
+);
 
 export default routes;

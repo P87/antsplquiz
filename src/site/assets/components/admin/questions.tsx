@@ -74,6 +74,13 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
                 >
                   Edit
                 </a>
+
+                <a
+                  className="btn btn-sm btn-success ms-1"
+                  href={`/admin/questions/set-correct-answer/${question.id}`}
+                >
+                  Set Answer
+                </a>
               </div>
             </div>
           );
@@ -113,6 +120,12 @@ const QuestionsAdmin = ({ answerSets, questions }: Props): JSX.Element => {
                   href={`/admin/questions/edit/${question.id}`}
                 >
                   Edit
+                </a>
+                <a
+                  className="btn btn-sm btn-success"
+                  href={`/admin/questions/set-correct-answer/${question.id}`}
+                >
+                  Set Answer
                 </a>
               </div>
             </div>

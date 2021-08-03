@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as mysql from "../../utils/mysql";
+import logger from "../../utils/logger";
 
 export default async (req: Request, res: Response) => {
   try {
@@ -9,7 +10,7 @@ export default async (req: Request, res: Response) => {
       [req.session.userId!, date]
     );
     if (!questions) {
-      console.error("Failed to get active questions");
+      logger.error("Failed to get active questions");
       return res.json({ success: false });
     }
 
@@ -39,7 +40,7 @@ export default async (req: Request, res: Response) => {
       }, {}),
     });
   } catch (err) {
-    console.error("Error getting active questions", err);
+    logger.error("Error getting active questions", { err });
     res.json({ success: false });
   }
 };
