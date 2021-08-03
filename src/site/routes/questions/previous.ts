@@ -31,7 +31,7 @@ export default async (req: Request, res: Response) => {
                     set_id: question.answer_set_id,
                     name: question.user_answer,
                     answer: question.answer,
-                    correct: question.correct
+                    correct: question.correct,
                   },
                 ]
               : []),

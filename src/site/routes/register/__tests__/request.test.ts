@@ -23,7 +23,6 @@ describe("Registration post route", () => {
     "email",
     "password",
     "confirm_password",
-    "leagueCode",
   ])("renders an error message if %p is not passed", (field) => {
     const mockRequest = {
       session: {

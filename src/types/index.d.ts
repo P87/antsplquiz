@@ -94,6 +94,9 @@ export interface MySQLUser extends RowDataPacket {
   display_name: string;
   is_admin: boolean;
   confirmed: boolean;
+  paid: boolean;
+  email: string;
+  username: string;
 }
 
 export interface MySQLCount extends RowDataPacket {

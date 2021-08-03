@@ -5,6 +5,7 @@ import Questions from "../components/home/questions";
 import AnswerQuestion from "../components/questions/answer";
 import EditQuestion from "../components/admin/editQuestion";
 import SetCorrectAnswer from "../components/admin/setCorrectAnswer";
+import UsersAdmin from "../components/admin/users";
 
 const adminQuestionsContainer = document.getElementById("admin-questions");
 const questionsContainer = document.getElementById("questions-container");
@@ -17,6 +18,7 @@ const adminEditQuestionContainer = document.getElementById(
 const adminSetCorrectAnswerContainer = document.getElementById(
   "admin-set-correct-answer"
 );
+const adminUsersContainer = document.getElementById("admin-users");
 
 if (adminQuestionsContainer) {
   renderQuestionsAdmin();
@@ -36,6 +38,10 @@ if (answerQuestionContainer) {
 
 if (adminSetCorrectAnswerContainer) {
   ReactDOM.render(<SetCorrectAnswer />, adminSetCorrectAnswerContainer);
+}
+
+if (adminUsersContainer) {
+  ReactDOM.render(<UsersAdmin />, adminUsersContainer);
 }
 
 async function renderQuestionsAdmin() {

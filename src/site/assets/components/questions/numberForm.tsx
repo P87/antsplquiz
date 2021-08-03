@@ -1,4 +1,4 @@
-import { MySQLAnswer, Question } from "../../../../types";
+import { MySQLAnswer } from "../../../../types";
 import React, { Dispatch, useEffect, useState } from "react";
 
 interface Props {

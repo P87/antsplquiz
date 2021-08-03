@@ -59,14 +59,14 @@ export default async (req: Request, res: Response) => {
       return res.redirect("/");
     }
   } catch (err) {
+    req.session.loggedIn = false;
+    req.session.userId = undefined;
+    req.session.displayName = undefined;
+    req.session.isAdmin = undefined;
     return res.render("login", {
       errorMessage: "Something went wrong, please try again",
       ...req.body,
       csrfToken: req.csrfToken(),
     });
-    req.session.loggedIn = false;
-    req.session.userId = undefined;
-    req.session.displayName = undefined;
-    req.session.isAdmin = undefined;
   }
 };
