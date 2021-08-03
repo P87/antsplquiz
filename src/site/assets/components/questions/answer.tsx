@@ -123,9 +123,9 @@ export const AnswerForm = ({
     case "score":
       return (
         <CorrectScoreForm
-          question={question}
           setErrorMessage={setErrorMessage}
           savedAnswer={savedAnswer as MySQLAnswer[]}
+          submitUrl={`/questions/set-correct-score-answer/${question.id}`}
         />
       );
     case null:

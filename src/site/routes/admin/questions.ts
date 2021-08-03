@@ -105,7 +105,7 @@ routes.post("/add-question", async (req: Request, res: Response) => {
 });
 
 routes.post(
-  "/set-correct-number-answer/:questionId",
+  "/set-correct-text-answer/:questionId",
   async (req: Request, res: Response) => {
     const { answer } = req.body;
     const questionId = +req.params.questionId;
@@ -131,7 +131,7 @@ routes.post(
 
       return res.json({ success: true });
     } catch (err) {
-      logger.error("Error adding correct number answer");
+      logger.error("Error adding correct text answer");
       res.json({ success: false });
     }
   }

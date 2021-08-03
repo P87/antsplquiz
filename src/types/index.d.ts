@@ -56,6 +56,16 @@ export interface Question {
   answer_amount: number;
 }
 
+export interface MySQLCorrectAnswer {
+  answer_amount: number;
+  answer_set_answers_id: null | number;
+  answer_set_id: null | number;
+  answer_type: string;
+  correct_answer: null | string;
+  points: number;
+  question: string;
+}
+
 export interface ActiveQuestion {
   [key: string]: {
     id: number;
@@ -75,6 +85,12 @@ export interface ActiveAnswer {
     name: string;
     answer: string;
     correct: boolean;
+  }[];
+}
+
+export interface CorrectAnswer {
+  [key: string]: {
+    correctAnswer: string;
   }[];
 }
 

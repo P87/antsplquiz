@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Question } from "../../../../types";
+import { CorrectAnswer, MySQLCorrectAnswer } from "../../../../types";
 import NumberForm from "../questions/numberForm";
+import { CORRECT_SCORE_TYPE, NUMBER_TYPE } from "../../../constants";
+import CorrectScoreForm from "../questions/correctScoreForm";
 
 interface FormState {
   question: string;
@@ -14,11 +16,12 @@ interface FormState {
   answerAmount: number;
 }
 
+const questionId = window.location.pathname.split("/")[4];
+
 const SetCorrectAnswer: React.FunctionComponent = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  const [question, setQuestion] = useState<Question>();
-  const [resultState, setResultState] = useState<null | boolean>(null);
+  const [question, setQuestion] = useState<MySQLCorrectAnswer[]>();
   const [formData, setFormData] = useState<FormState>({
     question: "",
     answerType: "",
@@ -30,11 +33,9 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
     points: undefined,
     answerAmount: 1,
   });
-  const [savedAnswer, setSavedAnswer] = useState();
 
   useEffect(() => {
-    const questionId = window.location.pathname.split("/")[4];
-    fetch(`/questions/get/${questionId}`, {
+    fetch(`/questions/get-correct-answers/${questionId}`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -47,7 +48,6 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
           setErrorMessage("There was an error, please refresh and try again.");
           return;
         } else {
-          setIsLoading(false);
           setQuestion(result.question);
           const deadline = new Date(result.question.deadline);
           setFormData({
@@ -64,52 +64,11 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
       })
       .catch(() => {
         setErrorMessage("There was an error, please refresh and try again");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
-
-  const handleFormSubmit = async (e: React.SyntheticEvent) => {
-    e.preventDefault();
-
-    const {
-      question: formQuestion,
-      deadlineDay,
-      deadlineMonth,
-      deadlineYear,
-      deadlineHour,
-      deadlineMinute,
-      points,
-    } = formData;
-
-    const result = await (
-      await fetch(`/admin/questions/edit/${question!.id}`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          question: formQuestion,
-          deadline: `${deadlineYear}-${deadlineMonth}-${deadlineDay} ${deadlineHour}:${deadlineMinute}:00`,
-          points,
-        }),
-      })
-    ).json();
-
-    if (result.success) {
-      setResultState(true);
-    } else {
-      setResultState(false);
-    }
-  };
-
-  const handleFormChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
-  ) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
-  };
 
   if (isLoading || !question) {
     return (
@@ -124,12 +83,35 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
     );
   }
 
+  if (question[0].correct_answer) {
+    return (
+      <div className="alert alert-warning text-center mt-5" role="alert">
+        This question has already had it's answer set.
+      </div>
+    );
+  }
+
   return (
-    <NumberForm
-      setErrorMessage={setErrorMessage}
-      savedAnswer={savedAnswer}
-      submitUrl={`/admin/questions/set-correct-number-answer/${question.id}`}
-    />
+    <>
+      <h2 className="mb-4">Q: {question[0].question}</h2>
+      {errorMessage && (
+        <div className="alert alert-danger text-center" role="alert">
+          {errorMessage}
+        </div>
+      )}
+      {question[0].answer_type === CORRECT_SCORE_TYPE && (
+        <CorrectScoreForm
+          submitUrl={`/admin/questions/set-correct-text-answer/${questionId}`}
+          setErrorMessage={setErrorMessage}
+        />
+      )}
+      {question[0].answer_type === NUMBER_TYPE && (
+        <NumberForm
+          setErrorMessage={setErrorMessage}
+          submitUrl={`/admin/questions/set-correct-text-answer/${questionId}`}
+        />
+      )}
+    </>
   );
 };
 

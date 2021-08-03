@@ -38,7 +38,7 @@ const PlayersForm = ({
 
     clearTimeout(searchTimeout);
 
-    if (value.length > 3) {
+    if (value.length > 2) {
       searchTimeout = setTimeout(() => {
         playerSearch(value);
       }, searchTimeoutLength);
@@ -116,7 +116,10 @@ const PlayersForm = ({
       )}
       <div className="alert alert-warning text-center" role="alert">
         Start typing the name of the player you want and select them from the
-        list.
+        list. Please bear in mind that the search only returns 10 names so you
+        might have to be specific with your search. Eg. Instead of "Son" search
+        for "Son Heung"
+        <br />
         <br />
         <strong>
           If you can't find the player you want please inform Ant ASAP so he can

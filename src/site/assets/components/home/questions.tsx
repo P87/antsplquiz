@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ActiveQuestion, ActiveAnswer } from "../../../../types";
+import { ActiveQuestion, ActiveAnswer, CorrectAnswer } from "../../../../types";
 import { formatDateToEnglish } from "../utils";
 
 interface NavProps {
@@ -16,6 +16,7 @@ const Questions = (): JSX.Element => {
   );
   const [previousAnswers, setPreviousAnswers] = useState<ActiveAnswer>({});
   const [displayActiveQuestions, setDisplayActiveQuestions] = useState(true);
+  const [correctAnswers, setCorrectAnswers] = useState<CorrectAnswer>();
 
   useEffect(() => {
     async function getActiveQuestions() {
@@ -52,6 +53,7 @@ const Questions = (): JSX.Element => {
     ).json();
     setPreviousQuestions(previousQs.questions);
     setPreviousAnswers(previousQs.answers);
+    setCorrectAnswers(previousQs.correctAnswers);
     setDisplayActiveQuestions(false);
   };
 
@@ -140,6 +142,7 @@ const Questions = (): JSX.Element => {
       ) : Object.keys(previousQuestions).length ? (
         <div>
           {Object.keys(previousQuestions).map((key) => {
+            const isSettled = correctAnswers && !!correctAnswers[key];
             const hasAnswered = !!previousAnswers[key]?.length;
             const question = previousQuestions[key];
             const correct =
@@ -148,17 +151,32 @@ const Questions = (): JSX.Element => {
               Object.values(previousAnswers[key]).every(
                 (answer) => answer.correct
               );
+            const wrongAnswerCount =
+              hasAnswered &&
+              isSettled &&
+              Object.values(previousAnswers[key]).filter(
+                (answer) =>
+                  !correctAnswers![key].some(
+                    (correctAnswer) =>
+                      correctAnswer.correctAnswer === answer.answer
+                  )
+              ).length;
+            const lost = wrongAnswerCount === question.answer_amount;
 
             return (
               <div className="mb-3">
                 <div
                   className={`row p-2 border ${
                     correct ? "bg-success" : "bg-primary"
-                  } fw-bold text-light border-dark`}
+                  } ${lost ? "bg-danger" : ""} fw-bold text-light border-dark`}
                 >
-                  <div className="col-10">Max Points</div>
+                  <div className="col-10">{!isSettled && "Max"} Points</div>
                   <div className="col-2 text-end">
-                    {question.points * question.answer_amount}
+                    {!isSettled && question.points * question.answer_amount}
+                    {isSettled &&
+                      wrongAnswerCount !== false &&
+                      question.points *
+                        (question.answer_amount - wrongAnswerCount!)}
                   </div>
                 </div>
                 <div className="row p-2 border border-top-0 border-bottom-0 border-dark">

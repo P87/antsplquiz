@@ -13,6 +13,16 @@ export default async (req: Request, res: Response) => {
       throw new Error("Error getting previous questions");
     }
 
+    const correctAnswers = await mysql.query(
+      "SELECT * FROM `questions_correct_answers` `q` LEFT JOIN `answer_set_answers` `set_ans` ON `q`.`answer_set_answers_id` = `set_ans`.`id`",
+      []
+    );
+
+    if (!correctAnswers) {
+      logger.error("Error getting correct answers for previous questions");
+      return res.json({ success: false });
+    }
+
     return res.json({
       questions: questions.reduce((qs, question) => {
         return {
@@ -38,6 +48,23 @@ export default async (req: Request, res: Response) => {
           ],
         };
       }, {}),
+      correctAnswers: correctAnswers.reduce(
+        (cas: { [key: string]: any[] }, correctAnswer) => {
+          const questionId = correctAnswer.question_id;
+          return {
+            ...cas,
+            [questionId]: [
+              ...(cas[questionId] ? cas[questionId] : []),
+              correctAnswer.answer_set_answers_id
+                ? {}
+                : {
+                    correctAnswer: correctAnswer.correct_answer,
+                  },
+            ],
+          };
+        },
+        {}
+      ),
     });
   } catch (err) {
     logger.error("Error getting previous questions", { err });

@@ -10,12 +10,14 @@ import SetTeamsAnswer from "./set-teams-asnwer";
 import PlayerSearch from "./player-search";
 import SetPlayersAnswer from "./set-players-answer";
 import SetManagersAnswer from "./set-managers-answer";
+import GetCorrectAnswers from "./get-correct-answers";
 
 const routes = Router();
 
 routes.post("/active", active);
 routes.post("/previous", previous);
 routes.post("/get/:questionId", getQuestion);
+routes.post("/get-correct-answers/:questionId", GetCorrectAnswers);
 routes.get("/answer/:questionId", answer);
 routes.post("/set-correct-score-answer/:questionId", setCorrectScoreAnswer);
 routes.post("/set-yes-no-answer/:questionId", setYesNopAnswer);

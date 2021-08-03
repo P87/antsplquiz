@@ -1,16 +1,16 @@
-import { MySQLAnswer, Question } from "../../../../types";
+import { MySQLAnswer } from "../../../../types";
 import React, { Dispatch, useEffect, useState } from "react";
 
 interface Props {
-  question: Question;
   setErrorMessage: Dispatch<React.SetStateAction<string>>;
   savedAnswer?: MySQLAnswer[];
+  submitUrl: string;
 }
 
 const CorrectScoreForm = ({
-  question,
   setErrorMessage,
   savedAnswer,
+  submitUrl,
 }: Props): JSX.Element => {
   const [homeScore, setHomeScore] = useState("");
   const [awayScore, setAwayScore] = useState("");
@@ -48,7 +48,7 @@ const CorrectScoreForm = ({
 
     const answer = `${homeScore}-${awayScore}`;
 
-    fetch(`/questions/set-correct-score-answer/${question.id}`, {
+    fetch(submitUrl, {
       method: "POST",
       headers: {
         Accept: "application/json",
