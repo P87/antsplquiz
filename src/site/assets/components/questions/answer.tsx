@@ -119,7 +119,7 @@ export const AnswerForm = ({
         <NumberForm
           setErrorMessage={setErrorMessage}
           savedAnswer={savedAnswer as MySQLAnswer[]}
-          submitUrl={`/questions/set-number-answer/${question.id}`}
+          submitUrl={`/questions/set-text-answer/${question.id}`}
         />
       );
     case "yesno":
@@ -135,7 +135,7 @@ export const AnswerForm = ({
         <CorrectScoreForm
           setErrorMessage={setErrorMessage}
           savedAnswer={savedAnswer as MySQLAnswer[]}
-          submitUrl={`/questions/set-correct-score-answer/${question.id}`}
+          submitUrl={`/questions/set-text-answer/${question.id}`}
         />
       );
     case null:

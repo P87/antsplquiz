@@ -9,6 +9,25 @@ export default async (req: Request, res: Response) => {
     return res.json({ success: false, message: "No answer supplied" });
   }
 
+  const question = await mysql.query(
+    "SELECT `deadline` FROM `questions` WHERE `id` = ?",
+    [+questionId]
+  );
+
+  if (!question) {
+    return res.json({
+      success: false,
+      message: "There was an error, please try again",
+    });
+  }
+
+  if (new Date(question[0].deadline) < new Date()) {
+    return res.json({
+      success: false,
+      message: "The deadline for this question has passed.",
+    });
+  }
+
   const update = await mysql.query(
     "UPDATE `answers` SET `final_answer` = false WHERE `user_id` = ? AND `question_id` = ?",
     [req.session.userId!, questionId]

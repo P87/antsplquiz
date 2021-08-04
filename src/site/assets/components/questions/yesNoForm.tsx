@@ -29,7 +29,7 @@ const YesNoForm = ({
   };
 
   const handleSubmit = () => {
-    fetch(`/questions/set-yes-no-answer/${question.id}`, {
+    fetch(`/questions/set-text-answer/${question.id}`, {
       method: "POST",
       headers: {
         Accept: "application/json",

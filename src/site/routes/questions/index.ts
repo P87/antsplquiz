@@ -3,14 +3,12 @@ import active from "./active";
 import previous from "./previous";
 import getQuestion from "./get-question";
 import answer from "./answer";
-import setCorrectScoreAnswer from "./set-correct-score-answer";
-import setYesNopAnswer from "./set-yes-no-answer";
-import setNumberAnswer from "./set-number-answer";
 import SetTeamsAnswer from "./set-teams-asnwer";
 import PlayerSearch from "./player-search";
 import SetPlayersAnswer from "./set-players-answer";
 import SetManagersAnswer from "./set-managers-answer";
 import GetCorrectAnswers from "./get-correct-answers";
+import SetTextAnswer from "./set-text-answer";
 
 const routes = Router();
 
@@ -19,12 +17,10 @@ routes.post("/previous", previous);
 routes.post("/get/:questionId", getQuestion);
 routes.post("/get-correct-answers/:questionId", GetCorrectAnswers);
 routes.get("/answer/:questionId", answer);
-routes.post("/set-correct-score-answer/:questionId", setCorrectScoreAnswer);
-routes.post("/set-yes-no-answer/:questionId", setYesNopAnswer);
-routes.post("/set-number-answer/:questionId", setNumberAnswer);
 routes.post("/set-teams-answer/:questionId", SetTeamsAnswer);
 routes.post("/player-search", PlayerSearch);
 routes.post("/set-players-answer/:questionId", SetPlayersAnswer);
 routes.post("/set-managers-answer/:questionId", SetManagersAnswer);
+routes.post("/set-text-answer/:questionId", SetTextAnswer);
 
 export default routes;
