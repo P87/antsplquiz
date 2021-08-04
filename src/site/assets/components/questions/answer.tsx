@@ -23,6 +23,7 @@ const AnswerQuestion = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
   const [setAnswers, setSetAnswers] = useState<undefined | MySQLSetAnswer[]>();
   const [answer, setAnswer] = useState<undefined | MySQLAnswer[]>();
+  const [deadline, setDeadline] = useState<Date>();
 
   useEffect(() => {
     const questionId = window.location.pathname.split("/")[3];
@@ -39,9 +40,9 @@ const AnswerQuestion = (): JSX.Element => {
           setErrorMessage("There was an error, please refresh and try again.");
           return;
         } else {
-          setIsLoading(false);
           setQuestion(result.question);
           setSetAnswers(result.setAnswers);
+          setDeadline(new Date(result.question.deadline));
           if (result.question.answer_set_id === ALL_PLAYERS_TYPE) {
             setAnswer(result.answers);
           } else {
@@ -57,6 +58,9 @@ const AnswerQuestion = (): JSX.Element => {
       })
       .catch(() => {
         setErrorMessage("There was an error, please refresh and try again");
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
   }, []);
 
@@ -85,12 +89,18 @@ const AnswerQuestion = (): JSX.Element => {
               {formatDateToEnglish(question.deadline)}
             </div>
           </div>
-          <AnswerForm
-            question={question}
-            setErrorMessage={setErrorMessage}
-            setAnswers={setAnswers}
-            savedAnswer={answer}
-          />
+          {deadline && deadline > new Date() ? (
+            <AnswerForm
+              question={question}
+              setErrorMessage={setErrorMessage}
+              setAnswers={setAnswers}
+              savedAnswer={answer}
+            />
+          ) : (
+            <div className="alert alert-warning text-center" role="alert">
+              The deadline for this question has passed.
+            </div>
+          )}
         </div>
       )}
     </div>
