@@ -142,19 +142,21 @@ export const AnswerForm = ({
       if (question.answer_set_id === Constants.ALL_TEAMS_TYPE && setAnswers) {
         return (
           <TeamsForm
-            question={question}
+            answerAmount={question.answer_amount}
             setErrorMessage={setErrorMessage}
             savedAnswer={savedAnswer as MySQLAnswer[]}
             setAnswers={setAnswers}
+            submitUrl={`/questions/set-teams-answer/${question.id}`}
           />
         );
       } else if (question.answer_set_id === Constants.ALL_PLAYERS_TYPE) {
         return (
           <PlayersForm
-            question={question}
+            answerAmount={question.answer_amount}
             setErrorMessage={setErrorMessage}
             setAnswers={setAnswers}
             savedAnswer={savedAnswer as MySQLSetAnswer[]}
+            submitUrl={`/questions/set-players-answer/${question.id}`}
           />
         );
       } else if (question.answer_set_id === Constants.ALL_MANAGERS_TYPE) {

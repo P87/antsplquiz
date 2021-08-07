@@ -1,18 +1,20 @@
-import { MySQLAnswer, MySQLSetAnswer, Question } from "../../../../types";
+import { MySQLAnswer, MySQLSetAnswer } from "../../../../types";
 import React, { Dispatch, useEffect, useState } from "react";
 
 interface Props {
-  question: Question;
+  answerAmount: number;
   setErrorMessage: Dispatch<React.SetStateAction<string>>;
   setAnswers?: MySQLSetAnswer[];
   savedAnswer?: MySQLAnswer[];
+  submitUrl: string;
 }
 
 const TeamsForm = ({
-  question,
+  answerAmount,
   setAnswers,
   setErrorMessage,
   savedAnswer,
+  submitUrl,
 }: Props): JSX.Element => {
   const [answer, setAnswer] = useState<any[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -37,7 +39,7 @@ const TeamsForm = ({
   };
 
   const handleSubmit = () => {
-    fetch(`/questions/set-teams-answer/${question.id}`, {
+    fetch(submitUrl, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -74,7 +76,7 @@ const TeamsForm = ({
   }
 
   const inputs = [];
-  for (let i = 0; i < question.answer_amount; i++) {
+  for (let i = 0; i < answerAmount; i++) {
     inputs.push(
       <select
         className="form-select form-select-lg mb-3"
@@ -106,18 +108,17 @@ const TeamsForm = ({
         </div>
       )}
       {inputs}
-      {answer.length === question.answer_amount &&
-        answer.every((a) => a !== "") && (
-          <div className="mt-4 text-center">
-            <button
-              className="btn btn-success"
-              type="button"
-              onClick={handleSubmit}
-            >
-              {savedAnswer?.length ? "Update" : "Submit"} Answer
-            </button>
-          </div>
-        )}
+      {answer.length === answerAmount && answer.every((a) => a !== "") && (
+        <div className="mt-4 text-center">
+          <button
+            className="btn btn-success"
+            type="button"
+            onClick={handleSubmit}
+          >
+            {savedAnswer?.length ? "Update" : "Submit"} Answer
+          </button>
+        </div>
+      )}
     </div>
   );
 };

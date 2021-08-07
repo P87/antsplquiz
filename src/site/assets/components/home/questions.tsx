@@ -145,38 +145,28 @@ const Questions = (): JSX.Element => {
             const isSettled = correctAnswers && !!correctAnswers[key];
             const hasAnswered = !!previousAnswers[key]?.length;
             const question = previousQuestions[key];
-            const correct =
+            const usersCorrectAnswers =
               hasAnswered &&
               previousAnswers[key] &&
-              Object.values(previousAnswers[key]).every(
-                (answer) => answer.correct
-              );
-            const wrongAnswerCount =
-              hasAnswered &&
-              isSettled &&
               Object.values(previousAnswers[key]).filter(
-                (answer) =>
-                  !correctAnswers![key].some(
-                    (correctAnswer) =>
-                      correctAnswer.correctAnswer === answer.answer
-                  )
-              ).length;
-            const lost = wrongAnswerCount === question.answer_amount;
+                (answer) => answer.correct
+              ) || [];
+            const correct = isSettled && usersCorrectAnswers.length === question.answer_amount
+            const lost = isSettled && !usersCorrectAnswers.length;
 
             return (
               <div className="mb-3">
                 <div
                   className={`row p-2 border ${
                     correct ? "bg-success" : "bg-primary"
-                  } ${lost ? "bg-danger" : ""} fw-bold text-light border-dark`}
+                  } ${lost ? "bg-danger" : ""} ${!lost && !correct && isSettled ? "bg-warning" : ""} fw-bold text-light border-dark`}
                 >
                   <div className="col-10">{!isSettled && "Max"} Points</div>
                   <div className="col-2 text-end">
                     {!isSettled && question.points * question.answer_amount}
                     {isSettled &&
-                      wrongAnswerCount !== false &&
                       question.points *
-                        (question.answer_amount - wrongAnswerCount!)}
+                        (usersCorrectAnswers.length)}
                   </div>
                 </div>
                 <div className="row p-2 border border-top-0 border-bottom-0 border-dark">

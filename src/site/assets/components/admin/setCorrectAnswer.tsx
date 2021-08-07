@@ -1,8 +1,19 @@
 import React, { useEffect, useState } from "react";
-import { CorrectAnswer, MySQLCorrectAnswer } from "../../../../types";
+import {
+  CorrectAnswer,
+  MySQLCorrectAnswer,
+  MySQLSetAnswer,
+} from "../../../../types";
 import NumberForm from "../questions/numberForm";
-import { CORRECT_SCORE_TYPE, NUMBER_TYPE } from "../../../constants";
+import {
+  ALL_PLAYERS_TYPE,
+  ALL_TEAMS_TYPE,
+  CORRECT_SCORE_TYPE,
+  NUMBER_TYPE,
+} from "../../../constants";
 import CorrectScoreForm from "../questions/correctScoreForm";
+import PlayersForm from "../questions/playersForm";
+import TeamsForm from "../questions/teamsForm";
 
 interface FormState {
   question: string;
@@ -22,17 +33,7 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [question, setQuestion] = useState<MySQLCorrectAnswer[]>();
-  const [formData, setFormData] = useState<FormState>({
-    question: "",
-    answerType: "",
-    deadlineDay: undefined,
-    deadlineMonth: undefined,
-    deadlineYear: undefined,
-    deadlineHour: undefined,
-    deadlineMinute: undefined,
-    points: undefined,
-    answerAmount: 1,
-  });
+  const [setAnswers, setSetAnswers] = useState<MySQLSetAnswer[]>();
 
   useEffect(() => {
     fetch(`/questions/get-correct-answers/${questionId}`, {
@@ -49,17 +50,7 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
           return;
         } else {
           setQuestion(result.question);
-          const deadline = new Date(result.question.deadline);
-          setFormData({
-            ...formData,
-            question: result.question.question,
-            deadlineDay: deadline.getDate(),
-            deadlineMonth: deadline.getMonth() + 1,
-            deadlineYear: deadline.getFullYear(),
-            deadlineHour: deadline.getHours(),
-            deadlineMinute: deadline.getMinutes(),
-            points: result.question.points,
-          });
+          setSetAnswers(result.setAnswers);
         }
       })
       .catch(() => {
@@ -109,6 +100,21 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
         <NumberForm
           setErrorMessage={setErrorMessage}
           submitUrl={`/admin/questions/set-correct-text-answer/${questionId}`}
+        />
+      )}
+      {question[0].answer_set_id === ALL_PLAYERS_TYPE && (
+        <PlayersForm
+          answerAmount={question[0].answer_amount}
+          setErrorMessage={setErrorMessage}
+          submitUrl={`/admin/questions/set-correct-teams-answer/${questionId}`}
+        />
+      )}
+      {question[0].answer_set_id === ALL_TEAMS_TYPE && (
+        <TeamsForm
+          answerAmount={question[0].answer_amount}
+          setErrorMessage={setErrorMessage}
+          submitUrl={`/admin/questions/set-correct-teams-answer/${questionId}`}
+          setAnswers={setAnswers}
         />
       )}
     </>

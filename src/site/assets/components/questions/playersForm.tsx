@@ -2,10 +2,11 @@ import { MySQLSetAnswer, Question } from "../../../../types";
 import React, { Dispatch, useEffect, useState } from "react";
 
 interface Props {
-  question: Question;
   setErrorMessage: Dispatch<React.SetStateAction<string>>;
   setAnswers?: MySQLSetAnswer[];
   savedAnswer?: MySQLSetAnswer[];
+  submitUrl: string;
+  answerAmount: number;
 }
 
 const searchTimeoutLength = 1500;
@@ -13,10 +14,11 @@ const searchTimeoutLength = 1500;
 let searchTimeout: NodeJS.Timeout;
 
 const PlayersForm = ({
-  question,
+  answerAmount,
   setErrorMessage,
   savedAnswer,
   setAnswers,
+  submitUrl,
 }: Props): JSX.Element => {
   const [answer, setAnswer] = useState<MySQLSetAnswer[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -79,7 +81,7 @@ const PlayersForm = ({
   };
 
   const handleSubmit = () => {
-    fetch(`/questions/set-players-answer/${question.id}`, {
+    fetch(submitUrl, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -180,7 +182,7 @@ const PlayersForm = ({
           </li>
         ))}
       </ul>
-      {answer.length === question.answer_amount && (
+      {answer.length === answerAmount && (
         <div className="mt-4 text-center">
           <button
             className="btn btn-success"
