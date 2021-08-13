@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  CorrectAnswer,
-  MySQLCorrectAnswer,
-  MySQLSetAnswer,
-} from "../../../../types";
+import { MySQLCorrectAnswer, MySQLSetAnswer } from "../../../../types";
 import NumberForm from "../questions/numberForm";
 import {
   ALL_PLAYERS_TYPE,
@@ -14,18 +10,6 @@ import {
 import CorrectScoreForm from "../questions/correctScoreForm";
 import PlayersForm from "../questions/playersForm";
 import TeamsForm from "../questions/teamsForm";
-
-interface FormState {
-  question: string;
-  answerType: string | number;
-  deadlineDay: undefined | number;
-  deadlineMonth: undefined | number;
-  deadlineYear: undefined | number;
-  deadlineHour: undefined | number;
-  deadlineMinute: undefined | number;
-  points: undefined | number;
-  answerAmount: number;
-}
 
 const questionId = window.location.pathname.split("/")[4];
 
@@ -74,7 +58,7 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
     );
   }
 
-  if (question[0].correct_answer) {
+  if (question[0].correct_answer || question[0].answer_set_id) {
     return (
       <div className="alert alert-warning text-center mt-5" role="alert">
         This question has already had it's answer set.
@@ -106,7 +90,7 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
         <PlayersForm
           answerAmount={question[0].answer_amount}
           setErrorMessage={setErrorMessage}
-          submitUrl={`/admin/questions/set-correct-teams-answer/${questionId}`}
+          submitUrl={`/admin/questions/set-correct-players-answer/${questionId}`}
         />
       )}
       {question[0].answer_set_id === ALL_TEAMS_TYPE && (

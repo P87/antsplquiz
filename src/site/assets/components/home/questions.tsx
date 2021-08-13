@@ -146,12 +146,15 @@ const Questions = (): JSX.Element => {
             const hasAnswered = !!previousAnswers[key]?.length;
             const question = previousQuestions[key];
             const usersCorrectAnswers =
-              hasAnswered &&
-              previousAnswers[key] &&
-              Object.values(previousAnswers[key]).filter(
-                (answer) => answer.correct
-              ) || [];
-            const correct = isSettled && usersCorrectAnswers.length === question.answer_amount
+              (hasAnswered &&
+                previousAnswers[key] &&
+                Object.values(previousAnswers[key]).filter(
+                  (answer) => answer.correct
+                )) ||
+              [];
+            const correct =
+              isSettled &&
+              usersCorrectAnswers.length === question.answer_amount;
             const lost = isSettled && !usersCorrectAnswers.length;
 
             return (
@@ -159,14 +162,14 @@ const Questions = (): JSX.Element => {
                 <div
                   className={`row p-2 border ${
                     correct ? "bg-success" : "bg-primary"
-                  } ${lost ? "bg-danger" : ""} ${!lost && !correct && isSettled ? "bg-warning" : ""} fw-bold text-light border-dark`}
+                  } ${lost ? "bg-danger" : ""} ${
+                    !lost && !correct && isSettled ? "bg-warning" : ""
+                  } fw-bold text-light border-dark`}
                 >
                   <div className="col-10">{!isSettled && "Max"} Points</div>
                   <div className="col-2 text-end">
                     {!isSettled && question.points * question.answer_amount}
-                    {isSettled &&
-                      question.points *
-                        (usersCorrectAnswers.length)}
+                    {isSettled && question.points * usersCorrectAnswers.length}
                   </div>
                 </div>
                 <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
