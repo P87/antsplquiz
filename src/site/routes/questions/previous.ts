@@ -55,11 +55,11 @@ export default async (req: Request, res: Response) => {
             ...cas,
             [questionId]: [
               ...(cas[questionId] ? cas[questionId] : []),
-              correctAnswer.answer_set_answers_id
-                ? {}
-                : {
-                    correctAnswer: correctAnswer.correct_answer,
-                  },
+              {
+                correctAnswer: correctAnswer.answer_set_answers_id
+                  ? correctAnswer.answer
+                  : correctAnswer.correct_answer,
+              },
             ],
           };
         },

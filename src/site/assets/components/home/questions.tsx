@@ -201,6 +201,18 @@ const Questions = (): JSX.Element => {
                           </div>
                         </div>
                       )}
+                      {!correct && correctAnswers && correctAnswers[key] && (
+                        <div className="col-12">
+                          <div className="alert alert-warning">
+                            The correct answer was:
+                            <ul>
+                              {correctAnswers[key].map((correctAnswer) => (
+                                <li>{correctAnswer.correctAnswer}</li>
+                              ))}
+                            </ul>
+                          </div>
+                        </div>
+                      )}
                     </>
                   ) : (
                     <div className="alert alert-danger">
