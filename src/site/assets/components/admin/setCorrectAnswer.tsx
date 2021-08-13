@@ -58,7 +58,7 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
     );
   }
 
-  if (question[0].correct_answer || question[0].answer_set_id) {
+  if (question[0].correct_answer) {
     return (
       <div className="alert alert-warning text-center mt-5" role="alert">
         This question has already had it's answer set.
