@@ -132,3 +132,9 @@ export interface MySQLAnswer extends RowDataPacket {
   user_id: number;
   date_added: string;
 }
+
+export interface MySQLStanding extends RowDataPacket {
+  id: number;
+  date_added: string;
+  standings: string;
+}

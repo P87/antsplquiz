@@ -7,6 +7,7 @@ import EditQuestion from "../components/admin/editQuestion";
 import SetCorrectAnswer from "../components/admin/setCorrectAnswer";
 import UsersAdmin from "../components/admin/users";
 import UserAdmin from "../components/admin/user";
+import StandingsAdmin from "../components/admin/standings";
 
 const adminQuestionsContainer = document.getElementById("admin-questions");
 const questionsContainer = document.getElementById("questions-container");
@@ -21,6 +22,7 @@ const adminSetCorrectAnswerContainer = document.getElementById(
 );
 const adminUsersContainer = document.getElementById("admin-users");
 const adminUserContainer = document.getElementById("admin-user");
+const adminStandingsContainer = document.getElementById("admin-standings");
 
 if (adminQuestionsContainer) {
   renderQuestionsAdmin();
@@ -48,6 +50,10 @@ if (adminUsersContainer) {
 
 if (adminUserContainer) {
   ReactDOM.render(<UserAdmin />, adminUserContainer);
+}
+
+if (adminStandingsContainer) {
+  ReactDOM.render(<StandingsAdmin />, adminStandingsContainer);
 }
 
 async function renderQuestionsAdmin() {
