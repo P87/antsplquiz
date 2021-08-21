@@ -10,6 +10,7 @@ import login from "./login";
 import questions from "./questions";
 import cookiesPolicy from "./cookies-policy";
 import privacyPolicy from "./privacy-policy";
+import introduction from "./introduction";
 
 const routes = Router();
 const csrfProtection = csurf();
@@ -29,5 +30,7 @@ routes.use("/admin", isAdmin, admin);
 routes.use("/questions", isLoggedIn, questions);
 
 routes.get("/logout", isLoggedIn, logout);
+
+routes.get("/introduction", isLoggedIn, introduction);
 
 export default routes;

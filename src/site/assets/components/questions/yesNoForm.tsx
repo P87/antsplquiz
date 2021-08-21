@@ -1,16 +1,16 @@
-import { MySQLAnswer, Question } from "../../../../types";
+import { MySQLAnswer } from "../../../../types";
 import React, { Dispatch, useEffect, useState } from "react";
 
 interface Props {
-  question: Question;
   setErrorMessage: Dispatch<React.SetStateAction<string>>;
   savedAnswer?: MySQLAnswer[];
+  submitUrl: string;
 }
 
 const YesNoForm = ({
-  question,
   setErrorMessage,
   savedAnswer,
+  submitUrl,
 }: Props): JSX.Element => {
   const [answer, setAnswer] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -29,7 +29,7 @@ const YesNoForm = ({
   };
 
   const handleSubmit = () => {
-    fetch(`/questions/set-text-answer/${question.id}`, {
+    fetch(submitUrl, {
       method: "POST",
       headers: {
         Accept: "application/json",

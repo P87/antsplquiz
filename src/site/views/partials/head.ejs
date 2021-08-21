@@ -32,6 +32,9 @@
                       <a <% if (section === "admin") { %>class="nav-link active" aria-current="page"<% } else { %>class="nav-link"<% } %> href="/admin">Admin</a>
                     </li> 
                   <% } %>
+                    <li>
+                        <a <% if (section === "introduction") { %>class="nav-link active" aria-current="page"<% } else { %>class="nav-link"<% } %> href="/introduction">Introduction</a>
+                    </li>
                 <% } else { %>
                   <li class="nav-item">
                     <a <% if (section === "register") { %>class="nav-link active" aria-current="page"<% } else { %>class="nav-link"<% } %> href="/register">Register</a>

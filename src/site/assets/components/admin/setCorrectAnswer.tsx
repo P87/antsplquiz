@@ -6,10 +6,12 @@ import {
   ALL_TEAMS_TYPE,
   CORRECT_SCORE_TYPE,
   NUMBER_TYPE,
+  YESNO_TYPE,
 } from "../../../constants";
 import CorrectScoreForm from "../questions/correctScoreForm";
 import PlayersForm from "../questions/playersForm";
 import TeamsForm from "../questions/teamsForm";
+import YesNoForm from "../questions/yesNoForm";
 
 const questionId = window.location.pathname.split("/")[4];
 
@@ -82,6 +84,12 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
       )}
       {question[0].answer_type === NUMBER_TYPE && (
         <NumberForm
+          setErrorMessage={setErrorMessage}
+          submitUrl={`/admin/questions/set-correct-text-answer/${questionId}`}
+        />
+      )}
+      {question[0].answer_type === YESNO_TYPE && (
+        <YesNoForm
           setErrorMessage={setErrorMessage}
           submitUrl={`/admin/questions/set-correct-text-answer/${questionId}`}
         />

@@ -125,9 +125,9 @@ export const AnswerForm = ({
     case "yesno":
       return (
         <YesNoForm
-          question={question}
           setErrorMessage={setErrorMessage}
           savedAnswer={savedAnswer as MySQLAnswer[]}
+          submitUrl={`/questions/set-text-answer/${question.id}`}
         />
       );
     case "score":

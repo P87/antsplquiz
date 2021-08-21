@@ -7,7 +7,7 @@ const UsersAdmin = (): JSX.Element => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    fetch(`/admin/users/get`, {
+    fetch(`/admin/users/get-all`, {
       method: "POST",
       headers: {
         Accept: "application/json",
@@ -104,7 +104,9 @@ const UsersAdmin = (): JSX.Element => {
       {users.map((user) => (
         <div className="row p-1 border-start border-end border-dark border-bottom">
           <div className="col-3">
-            {user.display_name} ({user.username})
+            <a href={`/admin/users/${user.id}`}>
+              {user.display_name} ({user.username})
+            </a>
           </div>
           <div className="col-3">{user.email}</div>
           <div className="col text-center">{user.confirmed ? "Yes" : "No"}</div>
