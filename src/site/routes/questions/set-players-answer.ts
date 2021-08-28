@@ -1,10 +1,18 @@
 import { Request, Response } from "express";
 import * as mysql from "../../utils/mysql";
 import { MySQLSetAnswer } from "../../../types";
+import logger from "../../utils/logger";
 
 export default async (req: Request, res: Response) => {
   const questionId = req.params.questionId;
   const { answer } = req.body;
+
+  logger.info("Attempting answer insert", {
+    userId: req.session.userId,
+    displayName: req.session.displayName,
+    questionId,
+    answer,
+  });
 
   if (!answer) {
     return res.json({ success: false, message: "No answer supplied" });
