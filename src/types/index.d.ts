@@ -67,25 +67,25 @@ export interface MySQLCorrectAnswer {
 }
 
 export interface ActiveQuestion {
-  [key: string]: {
-    id: number;
-    answer_amount: number;
-    answer_set_id: number;
-    answer_type: null | string;
-    deadline: string;
-    points: number;
-    question: string;
-    user_answer: string;
-  };
+  id: number;
+  answer_amount: number;
+  answer_set_id: number;
+  answer_type: null | string;
+  deadline: string;
+  points: number;
+  question: string;
+  user_answer: string;
 }
 
 export interface ActiveAnswer {
-  [key: string]: {
-    set_id: number;
-    name: string;
-    answer: string;
-    correct: boolean;
-  }[];
+  set_id: number;
+  name: string;
+  answer: string;
+  correct: boolean;
+}
+
+export interface Dictionary<T> {
+  [key: string]: T;
 }
 
 export interface CorrectAnswer {
