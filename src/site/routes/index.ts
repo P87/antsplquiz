@@ -11,6 +11,7 @@ import questions from "./questions";
 import cookiesPolicy from "./cookies-policy";
 import privacyPolicy from "./privacy-policy";
 import introduction from "./introduction";
+import leaderBoard from "./leader-board";
 
 const routes = Router();
 const csrfProtection = csurf();
@@ -28,6 +29,8 @@ routes.use("/register", register);
 routes.use("/admin", isAdmin, admin);
 
 routes.use("/questions", isLoggedIn, questions);
+
+routes.use("/leader-board", isLoggedIn, leaderBoard);
 
 routes.get("/logout", isLoggedIn, logout);
 

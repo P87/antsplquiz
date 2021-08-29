@@ -8,6 +8,7 @@ import SetCorrectAnswer from "../components/admin/setCorrectAnswer";
 import UsersAdmin from "../components/admin/users";
 import UserAdmin from "../components/admin/user";
 import StandingsAdmin from "../components/admin/standings";
+import LeagueTable from "../components/leagueTable";
 
 const adminQuestionsContainer = document.getElementById("admin-questions");
 const questionsContainer = document.getElementById("questions-container");
@@ -23,6 +24,7 @@ const adminSetCorrectAnswerContainer = document.getElementById(
 const adminUsersContainer = document.getElementById("admin-users");
 const adminUserContainer = document.getElementById("admin-user");
 const adminStandingsContainer = document.getElementById("admin-standings");
+const leaderBoardContainer = document.getElementById("leader-board");
 
 if (adminQuestionsContainer) {
   renderQuestionsAdmin();
@@ -54,6 +56,10 @@ if (adminUserContainer) {
 
 if (adminStandingsContainer) {
   ReactDOM.render(<StandingsAdmin />, adminStandingsContainer);
+}
+
+if (leaderBoardContainer) {
+  ReactDOM.render(<LeagueTable />, leaderBoardContainer);
 }
 
 async function renderQuestionsAdmin() {
