@@ -12,6 +12,7 @@ interface NavProps {
   onActiveQuestionsClick: (e: React.SyntheticEvent) => void;
   onUnansweredQuestionsClick: (e: React.SyntheticEvent) => void;
   activeTab: Tabs;
+  unansweredCount: number;
 }
 
 interface ActiveQuestionProps {
@@ -126,6 +127,7 @@ const Questions = (): JSX.Element => {
         onActiveQuestionsClick={showActiveQuestions}
         onUnansweredQuestionsClick={showUnansweredQuestions}
         activeTab={activeTab}
+        unansweredCount={unansweredActiveQuestions.length}
       />
 
       {hasUnansweredQuestions && (
@@ -269,6 +271,7 @@ export const QuestionsNav = ({
   onActiveQuestionsClick,
   onUnansweredQuestionsClick,
   activeTab,
+  unansweredCount,
 }: NavProps): JSX.Element => {
   return (
     <div className="row mt-4">
@@ -282,6 +285,9 @@ export const QuestionsNav = ({
             onClick={onUnansweredQuestionsClick}
           >
             Unanswered
+            {unansweredCount > 0 && (
+              <span className="badge bg-danger ms-1">{unansweredCount}</span>
+            )}
           </a>
         </li>
         <li className="nav-item">
