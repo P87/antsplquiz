@@ -53,7 +53,7 @@ const Questions = (): JSX.Element => {
   const [correctAnswers, setCorrectAnswers] = useState<CorrectAnswer>();
   const [activeTab, setActiveTab] = useState<Tabs>(Tabs.ACTIVE);
   const [activePreviousTab, setActivePreviousTab] = useState<Tabs>(
-    Tabs.UNSETTLED
+    Tabs.SETTLED
   );
 
   useEffect(() => {
