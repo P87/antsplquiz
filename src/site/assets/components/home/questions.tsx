@@ -15,6 +15,11 @@ interface NavProps {
   unansweredCount: number;
 }
 
+interface PreviousNavProps {
+  activeTab: Tabs;
+  onTabClick: (tab: Tabs, e: React.SyntheticEvent) => void;
+}
+
 interface ActiveQuestionProps {
   hasAnswered: boolean;
   question: ActiveQuestion;
@@ -25,6 +30,8 @@ enum Tabs {
   UNANSWERED,
   ACTIVE,
   PREVIOUS,
+  UNSETTLED,
+  SETTLED,
 }
 
 const Questions = (): JSX.Element => {
@@ -45,6 +52,9 @@ const Questions = (): JSX.Element => {
   >({});
   const [correctAnswers, setCorrectAnswers] = useState<CorrectAnswer>();
   const [activeTab, setActiveTab] = useState<Tabs>(Tabs.ACTIVE);
+  const [activePreviousTab, setActivePreviousTab] = useState<Tabs>(
+    Tabs.UNSETTLED
+  );
 
   useEffect(() => {
     async function getActiveQuestions() {
@@ -111,6 +121,11 @@ const Questions = (): JSX.Element => {
     setActiveTab(Tabs.UNANSWERED);
   };
 
+  const onPreviousTabClick = (tab: Tabs, event: React.SyntheticEvent) => {
+    event.preventDefault();
+    setActivePreviousTab(tab);
+  };
+
   const hasUnansweredQuestions = Object.values(activeQuestions).some(
     (question) => {
       return (
@@ -175,89 +190,99 @@ const Questions = (): JSX.Element => {
       {activeTab === Tabs.PREVIOUS &&
         (Object.keys(previousQuestions).length ? (
           <div>
-            {Object.keys(previousQuestions).map((key) => {
-              const isSettled = correctAnswers && !!correctAnswers[key];
-              const hasAnswered = !!previousAnswers[key]?.length;
-              const question = previousQuestions[key];
-              const usersCorrectAnswers =
-                (hasAnswered &&
-                  previousAnswers[key] &&
-                  Object.values(previousAnswers[key]).filter(
-                    (answer) => answer.correct
-                  )) ||
-                [];
-              const correct =
-                isSettled &&
-                usersCorrectAnswers.length === question.answer_amount;
-              const lost = isSettled && !usersCorrectAnswers.length;
+            <PreviousNav
+              activeTab={activePreviousTab}
+              onTabClick={onPreviousTabClick}
+            />
+            {Object.keys(previousQuestions)
+              .filter((key) => {
+                return activePreviousTab === Tabs.SETTLED
+                  ? correctAnswers && !!correctAnswers[key]
+                  : !correctAnswers || (correctAnswers && !correctAnswers[key]);
+              })
+              .map((key) => {
+                const isSettled = correctAnswers && !!correctAnswers[key];
+                const hasAnswered = !!previousAnswers[key]?.length;
+                const question = previousQuestions[key];
+                const usersCorrectAnswers =
+                  (hasAnswered &&
+                    previousAnswers[key] &&
+                    Object.values(previousAnswers[key]).filter(
+                      (answer) => answer.correct
+                    )) ||
+                  [];
+                const correct =
+                  isSettled &&
+                  usersCorrectAnswers.length === question.answer_amount;
+                const lost = isSettled && !usersCorrectAnswers.length;
 
-              return (
-                <div className="mb-3">
-                  <div
-                    className={`row p-2 border ${
-                      correct ? "bg-success" : "bg-primary"
-                    } ${lost ? "bg-danger" : ""} ${
-                      !lost && !correct && isSettled ? "bg-warning" : ""
-                    } fw-bold text-light border-dark`}
-                  >
-                    <div className="col-10">{!isSettled && "Max"} Points</div>
-                    <div className="col-2 text-end">
-                      {!isSettled && question.points * question.answer_amount}
-                      {isSettled &&
-                        question.points * usersCorrectAnswers.length}
-                    </div>
-                  </div>
-                  <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
-                    <div className="col-12">{question.question}</div>
-                  </div>
-                  <div className="row p-2 border border-top-0 fw-bold border-bottom-0 border-dark">
-                    <div className="col-12">
-                      Deadline: {formatDateToEnglish(question.deadline)}
-                    </div>
-                  </div>
-                  <div className="row p-2 border border-top-0 border-dark">
-                    {hasAnswered ? (
-                      <>
-                        <div className="col-12">
-                          Your Answer:
-                          <ul>
-                            {previousAnswers[key] &&
-                              Object.values(previousAnswers[key]).map(
-                                (answer) => (
-                                  <li>{answer.name || answer.answer}</li>
-                                )
-                              )}
-                          </ul>
-                        </div>
-                        {correct && (
-                          <div className="col-12">
-                            <div className="alert alert-success">
-                              Nice one! You got this question right
-                            </div>
-                          </div>
-                        )}
-                        {!correct && correctAnswers && correctAnswers[key] && (
-                          <div className="col-12">
-                            <div className="alert alert-warning">
-                              The correct answer was:
-                              <ul>
-                                {correctAnswers[key].map((correctAnswer) => (
-                                  <li>{correctAnswer.correctAnswer}</li>
-                                ))}
-                              </ul>
-                            </div>
-                          </div>
-                        )}
-                      </>
-                    ) : (
-                      <div className="alert alert-danger">
-                        We don't have an answer from you for this question
+                return (
+                  <div className="mb-3">
+                    <div
+                      className={`row p-2 border ${
+                        correct ? "bg-success" : "bg-primary"
+                      } ${lost ? "bg-danger" : ""} ${
+                        !lost && !correct && isSettled ? "bg-warning" : ""
+                      } fw-bold text-light border-dark`}
+                    >
+                      <div className="col-10">{!isSettled && "Max"} Points</div>
+                      <div className="col-2 text-end">
+                        {!isSettled && question.points * question.answer_amount}
+                        {isSettled &&
+                          question.points * usersCorrectAnswers.length}
                       </div>
-                    )}
+                    </div>
+                    <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
+                      <div className="col-12">{question.question}</div>
+                    </div>
+                    <div className="row p-2 border border-top-0 fw-bold border-bottom-0 border-dark">
+                      <div className="col-12">
+                        Deadline: {formatDateToEnglish(question.deadline)}
+                      </div>
+                    </div>
+                    <div className="row p-2 border border-top-0 border-dark">
+                      {hasAnswered ? (
+                        <>
+                          <div className="col-12">
+                            Your Answer:
+                            <ul>
+                              {previousAnswers[key] &&
+                                Object.values(previousAnswers[key]).map(
+                                  (answer) => (
+                                    <li>{answer.name || answer.answer}</li>
+                                  )
+                                )}
+                            </ul>
+                          </div>
+                          {correct && (
+                            <div className="col-12">
+                              <div className="alert alert-success">
+                                Nice one! You got this question right
+                              </div>
+                            </div>
+                          )}
+                          {!correct && correctAnswers && correctAnswers[key] && (
+                            <div className="col-12">
+                              <div className="alert alert-warning">
+                                The correct answer was:
+                                <ul>
+                                  {correctAnswers[key].map((correctAnswer) => (
+                                    <li>{correctAnswer.correctAnswer}</li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      ) : (
+                        <div className="alert alert-danger">
+                          We don't have an answer from you for this question
+                        </div>
+                      )}
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
           </div>
         ) : (
           <div className="col">No Previous Questions</div>
@@ -286,7 +311,9 @@ export const QuestionsNav = ({
           >
             Unanswered
             {unansweredCount > 0 && (
-              <span className="badge bg-danger ms-1">{unansweredCount}</span>
+              <span className="badge bg-danger ms-1 rounded-pill">
+                {unansweredCount}
+              </span>
             )}
           </a>
         </li>
@@ -365,6 +392,38 @@ export const ActiveQuestionBox = ({
         </div>
       </div>
     </div>
+  );
+};
+
+export const PreviousNav = ({
+  activeTab,
+  onTabClick,
+}: PreviousNavProps): JSX.Element => {
+  return (
+    <ul className="nav nav-tabs mb-3">
+      <li className="nav-item">
+        <a
+          className={
+            activeTab === Tabs.UNSETTLED ? "nav-link active" : "nav-link"
+          }
+          href="#"
+          onClick={onTabClick.bind(this, Tabs.UNSETTLED)}
+        >
+          Unsettled
+        </a>
+      </li>
+      <li className="nav-item">
+        <a
+          className={
+            activeTab === Tabs.SETTLED ? "nav-link active" : "nav-link"
+          }
+          href="#"
+          onClick={onTabClick.bind(this, Tabs.SETTLED)}
+        >
+          Settled
+        </a>
+      </li>
+    </ul>
   );
 };
 
