@@ -1,10 +1,17 @@
 import React, { useEffect, useState } from "react";
-import { MySQLUser } from "../../../../types";
+import {
+  ActiveQuestion,
+  ActiveAnswer,
+  Dictionary,
+  MySQLUser,
+} from "../../../../types";
 
 const UserAdmin = (): JSX.Element => {
   const [user, setUser] = useState<MySQLUser>();
   const [errorMessage, setErrorMessage] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [questions, setQuestions] = useState<Dictionary<ActiveQuestion>>({});
+  const [answers, setAnswers] = useState<Dictionary<ActiveAnswer[]>>({});
 
   useEffect(() => {
     const userId = window.location.pathname.split("/")[3];
@@ -22,6 +29,8 @@ const UserAdmin = (): JSX.Element => {
           return;
         } else {
           setUser(result.user[0]);
+          setQuestions(result.questions);
+          setAnswers(result.answers);
         }
       })
       .catch(() => {
@@ -59,6 +68,27 @@ const UserAdmin = (): JSX.Element => {
       <h2>
         {user.display_name} ({user.username})
       </h2>
+      <div>
+        {Object.keys(questions).map((questionId) => {
+          const question = questions[questionId];
+          const answer = answers && answers[questionId];
+
+          return (
+            <div className="m-3 p-3 border border-dark">
+              <div className="fw-bold">{question.question}</div>
+              <div>
+                {answer && (
+                  <ul>
+                    {answer.map((ans) => (
+                      <li>{ans.name || ans.answer}</li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
