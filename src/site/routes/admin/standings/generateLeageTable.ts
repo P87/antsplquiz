@@ -37,16 +37,18 @@ export default async (req: Request, res: Response) => {
     };
   }, {});
 
-  const table = standings.map((standing) => {
-    const userId = standing.user_id;
-    const user = users.find((user) => user.id === userId);
-    const bonusPoints = addedPointsMap[userId] ? addedPointsMap[userId] : 0;
-    return {
-      userId,
-      userDisplayName: user && user.display_name,
-      points: parseInt(standing.total_points) + bonusPoints,
-    };
-  });
+  const table = standings
+    .map((standing) => {
+      const userId = standing.user_id;
+      const user = users.find((user) => user.id === userId);
+      const bonusPoints = addedPointsMap[userId] ? addedPointsMap[userId] : 0;
+      return {
+        userId,
+        userDisplayName: user && user.display_name,
+        points: parseInt(standing.total_points) + bonusPoints,
+      };
+    })
+    .sort((first, second) => second.points - first.points);
 
   const insert = mysql.insertOne("INSERT INTO `standings` SET standings = ?", [
     JSON.stringify(table),
