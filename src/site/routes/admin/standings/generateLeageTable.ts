@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import * as mysql from "../../../utils/mysql";
+import { Dictionary } from "../../../../types";
 
 export default async (req: Request, res: Response) => {
   const users = await mysql.query(
@@ -20,12 +21,30 @@ export default async (req: Request, res: Response) => {
     return res.json({ success: false, message: "Error getting standings" });
   }
 
-  const table = standings.map((standing) => {
-    const user = users.find((user) => user.id === standing.user_id);
+  const addedPoints = await mysql.query(
+    "SELECT `user_id`, SUM(`points`) as points FROM `added_points` GROUP BY `user_id`",
+    []
+  );
+
+  if (!addedPoints) {
+    return res.json({ success: false, message: "Error getting added points" });
+  }
+
+  const addedPointsMap: Dictionary<number> = addedPoints.reduce((acc, ap) => {
     return {
-      userId: standing.user_id,
+      ...acc,
+      [ap.user_id]: +ap.points,
+    };
+  }, {});
+
+  const table = standings.map((standing) => {
+    const userId = standing.user_id;
+    const user = users.find((user) => user.id === userId);
+    const bonusPoints = addedPointsMap[userId] ? addedPointsMap[userId] : 0;
+    return {
+      userId,
       userDisplayName: user && user.display_name,
-      points: standing.total_points,
+      points: parseInt(standing.total_points) + bonusPoints,
     };
   });
 

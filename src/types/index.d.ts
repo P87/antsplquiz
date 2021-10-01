@@ -75,6 +75,7 @@ export interface ActiveQuestion {
   points: number;
   question: string;
   user_answer: string;
+  added_points: null | number;
 }
 
 export interface ActiveAnswer {

@@ -204,6 +204,7 @@ const Questions = (): JSX.Element => {
                 const isSettled = correctAnswers && !!correctAnswers[key];
                 const hasAnswered = !!previousAnswers[key]?.length;
                 const question = previousQuestions[key];
+                const addedPoints = question.added_points;
                 const usersCorrectAnswers =
                   (hasAnswered &&
                     previousAnswers[key] &&
@@ -221,15 +222,19 @@ const Questions = (): JSX.Element => {
                     <div
                       className={`row p-2 border ${
                         correct ? "bg-success" : "bg-primary"
-                      } ${lost ? "bg-danger" : ""} ${
-                        !lost && !correct && isSettled ? "bg-warning" : ""
+                      } ${lost && !addedPoints ? "bg-danger" : ""} ${
+                        (!lost && !correct && isSettled) || addedPoints
+                          ? "bg-warning"
+                          : ""
                       } fw-bold text-light border-dark`}
                     >
                       <div className="col-10">{!isSettled && "Max"} Points</div>
                       <div className="col-2 text-end">
                         {!isSettled && question.points * question.answer_amount}
                         {isSettled &&
+                          !addedPoints &&
                           question.points * usersCorrectAnswers.length}
+                        {addedPoints && addedPoints}
                       </div>
                     </div>
                     <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
@@ -270,6 +275,14 @@ const Questions = (): JSX.Element => {
                                     <li>{correctAnswer.correctAnswer}</li>
                                   ))}
                                 </ul>
+                              </div>
+                            </div>
+                          )}
+                          {addedPoints && (
+                            <div className="col-12">
+                              <div className="alert alert-success">
+                                You were awarded {addedPoints} points for this
+                                question
                               </div>
                             </div>
                           )}
