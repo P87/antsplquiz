@@ -1,21 +1,8 @@
-import React, { Dispatch, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Question, MySQLSetAnswer, MySQLAnswer } from "../../../../types";
 import { formatDateToEnglish } from "../utils";
-import CorrectScoreForm from "./correctScoreForm";
-import YesNoForm from "./yesNoForm";
-import NumberForm from "./numberForm";
-import TeamsForm from "./teamsForm";
-import PlayersForm from "./playersForm";
 import * as Constants from "../../../constants";
-import { ALL_PLAYERS_TYPE } from "../../../constants";
-import ManagersForm from "./managersForm";
-
-interface FormProps {
-  question: Question;
-  setErrorMessage: Dispatch<React.SetStateAction<string>>;
-  setAnswers?: MySQLSetAnswer[];
-  savedAnswer?: MySQLAnswer[] | MySQLSetAnswer[];
-}
+import { AnswerForm } from "./answerForm";
 
 const AnswerQuestion = (): JSX.Element => {
   const [question, setQuestion] = useState<undefined | Question>();
@@ -40,17 +27,18 @@ const AnswerQuestion = (): JSX.Element => {
           setErrorMessage("There was an error, please refresh and try again.");
           return;
         } else {
-          setQuestion(result.question);
+          const question = result.question;
+
+          setQuestion(question);
           setSetAnswers(result.setAnswers);
-          setDeadline(new Date(result.question.deadline));
-          if (result.question.answer_set_id === ALL_PLAYERS_TYPE) {
+          setDeadline(new Date(question.deadline));
+
+          if (question.answer_set_id === Constants.ALL_PLAYERS_TYPE) {
             setAnswer(result.answers);
           } else {
             setAnswer(
               result.answers.map((a: MySQLAnswer) =>
-                result.question.answer_set_id
-                  ? `${a.answer_set_id}`
-                  : `${a.answer}`
+                question.answer_set_id ? `${a.answer_set_id}` : `${a.answer}`
               )
             );
           }
@@ -64,9 +52,21 @@ const AnswerQuestion = (): JSX.Element => {
       });
   }, []);
 
+  if (isLoading) {
+    return (
+      <div className="d-flex align-items-center pt-5 pb-5">
+        <strong>Loading...</strong>
+        <div
+          className="spinner-border ms-auto text-warning"
+          role="status"
+          aria-hidden="true"
+        ></div>
+      </div>
+    );
+  }
+
   return (
     <div className="p-1">
-      {isLoading && <p>Loading...</p>}
       {errorMessage && (
         <div className="alert alert-danger text-center" role="alert">
           {errorMessage}
@@ -103,79 +103,6 @@ const AnswerQuestion = (): JSX.Element => {
           )}
         </div>
       )}
-    </div>
-  );
-};
-
-export const AnswerForm = ({
-  question,
-  setErrorMessage,
-  setAnswers,
-  savedAnswer,
-}: FormProps): JSX.Element => {
-  switch (question.answer_type) {
-    case "number":
-      return (
-        <NumberForm
-          setErrorMessage={setErrorMessage}
-          savedAnswer={savedAnswer as MySQLAnswer[]}
-          submitUrl={`/questions/set-text-answer/${question.id}`}
-        />
-      );
-    case "yesno":
-      return (
-        <YesNoForm
-          setErrorMessage={setErrorMessage}
-          savedAnswer={savedAnswer as MySQLAnswer[]}
-          submitUrl={`/questions/set-text-answer/${question.id}`}
-        />
-      );
-    case "score":
-      return (
-        <CorrectScoreForm
-          setErrorMessage={setErrorMessage}
-          savedAnswer={savedAnswer as MySQLAnswer[]}
-          submitUrl={`/questions/set-text-answer/${question.id}`}
-        />
-      );
-    case null:
-      if (question.answer_set_id === Constants.ALL_TEAMS_TYPE && setAnswers) {
-        return (
-          <TeamsForm
-            answerAmount={question.answer_amount}
-            setErrorMessage={setErrorMessage}
-            savedAnswer={savedAnswer as MySQLAnswer[]}
-            setAnswers={setAnswers}
-            submitUrl={`/questions/set-teams-answer/${question.id}`}
-          />
-        );
-      } else if (question.answer_set_id === Constants.ALL_PLAYERS_TYPE) {
-        return (
-          <PlayersForm
-            answerAmount={question.answer_amount}
-            setErrorMessage={setErrorMessage}
-            setAnswers={setAnswers}
-            savedAnswer={savedAnswer as MySQLSetAnswer[]}
-            submitUrl={`/questions/set-players-answer/${question.id}`}
-          />
-        );
-      } else if (question.answer_set_id === Constants.ALL_MANAGERS_TYPE) {
-        return (
-          <ManagersForm
-            answerAmount={question.answer_amount}
-            setErrorMessage={setErrorMessage}
-            setAnswers={setAnswers}
-            savedAnswer={savedAnswer as MySQLAnswer[]}
-            submitUrl={`/questions/set-managers-answer/${question.id}`}
-          />
-        );
-      }
-      break;
-  }
-
-  return (
-    <div className="text-center">
-      It appears this type of question isn't ready to answer yet
     </div>
   );
 };

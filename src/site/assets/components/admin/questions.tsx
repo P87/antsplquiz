@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { AnswerSet, Question } from "../../../../types";
 import { formatDateToEnglish } from "../utils";
+import * as Constants from "../../../constants";
 
 interface FormProps {
   answerSets: AnswerSet[];
@@ -244,10 +245,9 @@ const QuestionForm = ({ answerSets }: FormProps): JSX.Element => {
             ))}
           </optgroup>
           <optgroup label="Single Type">
-            <option value="yesno">Yes/No</option>
-            <option value="number">Number</option>
-            <option value="score">Score</option>
-            <option value="leaguetable">League Table</option>
+            <option value={Constants.YESNO_TYPE}>Yes/No</option>
+            <option value={Constants.NUMBER_TYPE}>Number</option>
+            <option value={Constants.CORRECT_SCORE_TYPE}>Score</option>
           </optgroup>
         </select>
       </div>
