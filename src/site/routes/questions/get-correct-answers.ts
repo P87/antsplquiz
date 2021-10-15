@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import * as mysql from "../../utils/mysql";
 import logger from "../../utils/logger";
-import { ALL_TEAMS_TYPE } from "../../constants";
+import { ALL_MANAGERS_TYPE, ALL_TEAMS_TYPE } from "../../constants";
 import { MySQLSetAnswer } from "../../../types";
 
 export default async (req: Request, res: Response) => {
@@ -17,7 +17,10 @@ export default async (req: Request, res: Response) => {
       return res.json({ success: false });
     }
 
-    if (question[0].answer_set_id === ALL_TEAMS_TYPE) {
+    if (
+      question[0].answer_set_id === ALL_TEAMS_TYPE ||
+      question[0].answer_set_id === ALL_MANAGERS_TYPE
+    ) {
       setAnswers = await mysql.query<MySQLSetAnswer>(
         "SELECT * FROM `answer_set_answers` WHERE `set_id` = ?",
         [question[0].answer_set_id]
@@ -33,7 +36,7 @@ export default async (req: Request, res: Response) => {
       setAnswers: setAnswers ? setAnswers : [],
     });
   } catch (err) {
-    logger.error("Error getting active questions", { err });
+    logger.error("Error getting correct answers", { err });
     res.json({ success: false });
   }
 };

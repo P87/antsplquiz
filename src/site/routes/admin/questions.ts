@@ -206,4 +206,38 @@ routes.post(
   }
 );
 
+routes.post(
+  "/set-correct-managers-answer/:questionId",
+  async (req: Request, res: Response) => {
+    const { answer } = req.body;
+    const questionId = +req.params.questionId;
+
+    const answerIds = answer.map((a: string) => +a);
+
+    if (
+      !(await mysql.query(
+        "UPDATE `answers` SET `correct` = true WHERE `question_id` = ? AND `final_answer` = 1 AND `answer_set_id` IN (?)",
+        [questionId, answerIds]
+      ))
+    ) {
+      return res.json({ success: false, message: "Error updating answers" });
+    }
+    try {
+      answerIds.forEach(async (answer: number) => {
+        const insert = await mysql.insertOne(
+          "INSERT INTO `questions_correct_answers` SET `question_id` = ?, `answer_set_answers_id` = ?",
+          [questionId, answer]
+        );
+        if (!insert) {
+          throw new Error("Error inserting correct answer");
+        }
+      });
+    } catch (err) {
+      return res.json({ success: false, message: err.message });
+    }
+
+    return res.json({ success: true });
+  }
+);
+
 export default routes;

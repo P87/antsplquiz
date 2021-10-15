@@ -162,10 +162,11 @@ export const AnswerForm = ({
       } else if (question.answer_set_id === Constants.ALL_MANAGERS_TYPE) {
         return (
           <ManagersForm
-            question={question}
+            answerAmount={question.answer_amount}
             setErrorMessage={setErrorMessage}
             setAnswers={setAnswers}
             savedAnswer={savedAnswer as MySQLAnswer[]}
+            submitUrl={`/questions/set-managers-answer/${question.id}`}
           />
         );
       }

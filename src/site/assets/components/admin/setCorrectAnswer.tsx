@@ -4,6 +4,7 @@ import NumberForm from "../questions/numberForm";
 import {
   ALL_PLAYERS_TYPE,
   ALL_TEAMS_TYPE,
+  ALL_MANAGERS_TYPE,
   CORRECT_SCORE_TYPE,
   NUMBER_TYPE,
   YESNO_TYPE,
@@ -12,6 +13,7 @@ import CorrectScoreForm from "../questions/correctScoreForm";
 import PlayersForm from "../questions/playersForm";
 import TeamsForm from "../questions/teamsForm";
 import YesNoForm from "../questions/yesNoForm";
+import ManagersForm from "../questions/managersForm";
 
 const questionId = window.location.pathname.split("/")[4];
 
@@ -107,6 +109,14 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
           setErrorMessage={setErrorMessage}
           submitUrl={`/admin/questions/set-correct-teams-answer/${questionId}`}
           setAnswers={setAnswers}
+        />
+      )}
+      {question[0].answer_set_id === ALL_MANAGERS_TYPE && (
+        <ManagersForm
+          answerAmount={question[0].answer_amount}
+          setErrorMessage={setErrorMessage}
+          setAnswers={setAnswers}
+          submitUrl={`/admin/questions/set-correct-managers-answer/${questionId}`}
         />
       )}
     </>
