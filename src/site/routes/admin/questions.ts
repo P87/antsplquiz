@@ -240,4 +240,26 @@ routes.post(
   }
 );
 
+routes.post(
+  "/add-bonus-points/:questionId",
+  async (req: Request, res: Response) => {
+    const { points, userId } = req.body;
+    const questionId = +req.params.questionId;
+
+    try {
+      const insert = await mysql.insertOne(
+        "INSERT INTO `added_points` SET `question_id` = ?, `user_id` = ?, `points` = ?",
+        [questionId, userId, points]
+      );
+      if (!insert) {
+        throw new Error("Error inserting bonus points");
+      }
+    } catch (err) {
+      return res.json({ success: false, message: err.message });
+    }
+
+    return res.json({ success: true });
+  }
+);
+
 export default routes;
