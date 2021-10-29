@@ -6,23 +6,29 @@ import { MySQLSetAnswer } from "../../../types";
 const routes = Router();
 
 routes.get("/", (req, res) => {
-  res.render("admin/questions", {
+  res.render("admin/adminPage", {
     section: "admin",
     isAdmin: req.session.isAdmin,
+    title: "Questions",
+    divId: "admin-questions",
   });
 });
 
 routes.get("/edit/:questionId", (req: Request, res: Response) => {
-  res.render("admin/editQuestion", {
+  res.render("admin/adminPage", {
     section: "admin",
     isAdmin: req.session.isAdmin,
+    title: "Edit Question",
+    divId: "admin-edit-question",
   });
 });
 
 routes.get("/set-correct-answer/:questionId", (req: Request, res: Response) => {
-  res.render("admin/setCorrectAnswer", {
+  res.render("admin/adminPage", {
     section: "admin",
     isAdmin: req.session.isAdmin,
+    title: "Set Correct Answer",
+    divId: "admin-set-correct-answer",
   });
 });
 
@@ -53,7 +59,7 @@ routes.get("/answer-sets", async (req: Request, res: Response) => {
     }
     res.json(sets);
   } catch (err) {
-    logger.error("Error getting asnwer sets", err);
+    logger.error("Error getting answer sets", err);
     throw new Error("Error getting answer sets");
   }
 });

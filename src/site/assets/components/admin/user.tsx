@@ -6,6 +6,7 @@ import {
   Dictionary,
   MySQLUser,
 } from "../../../../types";
+import Loading from "../loading";
 
 const UserAdmin = (): JSX.Element => {
   const [user, setUser] = useState<MySQLUser>();
@@ -43,16 +44,7 @@ const UserAdmin = (): JSX.Element => {
   }, []);
 
   if ((isLoading || !user) && !errorMessage) {
-    return (
-      <div className="d-flex align-items-center pt-5 pb-5">
-        <strong>Loading...</strong>
-        <div
-          className="spinner-border ms-auto text-warning"
-          role="status"
-          aria-hidden="true"
-        ></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!user) {

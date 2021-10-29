@@ -14,6 +14,7 @@ import PlayersForm from "../questions/playersForm";
 import TeamsForm from "../questions/teamsForm";
 import YesNoForm from "../questions/yesNoForm";
 import ManagersForm from "../questions/managersForm";
+import Loading from "../loading";
 
 const questionId = window.location.pathname.split("/")[4];
 
@@ -50,16 +51,7 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
   }, []);
 
   if (isLoading || !question) {
-    return (
-      <div className="d-flex align-items-center pt-5 pb-5">
-        <strong>Loading...</strong>
-        <div
-          className="spinner-border ms-auto text-warning"
-          role="status"
-          aria-hidden="true"
-        ></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (question[0].correct_answer) {

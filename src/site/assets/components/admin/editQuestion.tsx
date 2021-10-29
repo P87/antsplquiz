@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Question } from "../../../../types";
+import Loading from "../loading";
 
 interface FormState {
   question: string;
@@ -110,16 +111,7 @@ const EditQuestion: React.FunctionComponent = () => {
   };
 
   if (isLoading) {
-    return (
-      <div className="d-flex align-items-center pt-5 pb-5">
-        <strong>Loading...</strong>
-        <div
-          className="spinner-border ms-auto text-warning"
-          role="status"
-          aria-hidden="true"
-        ></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (

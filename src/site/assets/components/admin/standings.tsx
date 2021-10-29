@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import Loading from "../loading";
 
 interface LeagueTable {
   userDisplayName: string;
@@ -67,16 +68,7 @@ const StandingsAdmin = (): JSX.Element => {
   };
 
   if ((isLoading || !leagueTable) && !errorMessage) {
-    return (
-      <div className="d-flex align-items-center pt-5 pb-5">
-        <strong>Loading...</strong>
-        <div
-          className="spinner-border ms-auto text-warning"
-          role="status"
-          aria-hidden="true"
-        ></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   if (!leagueTable) {

@@ -3,6 +3,7 @@ import { Question, MySQLSetAnswer, MySQLAnswer } from "../../../../types";
 import { formatDateToEnglish } from "../utils";
 import * as Constants from "../../../constants";
 import { AnswerForm } from "./answerForm";
+import Loading from "../loading";
 
 const AnswerQuestion = (): JSX.Element => {
   const [question, setQuestion] = useState<undefined | Question>();
@@ -53,16 +54,7 @@ const AnswerQuestion = (): JSX.Element => {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="d-flex align-items-center pt-5 pb-5">
-        <strong>Loading...</strong>
-        <div
-          className="spinner-border ms-auto text-warning"
-          role="status"
-          aria-hidden="true"
-        ></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
