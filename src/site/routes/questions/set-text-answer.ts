@@ -4,7 +4,7 @@ import logger from "../../utils/logger";
 
 export default async (req: Request, res: Response) => {
   const questionId = req.params.questionId;
-  const { answer } = req.body;
+  const { answer, powerToken } = req.body;
 
   logger.info("Attempting answer insert", {
     userId: req.session.userId,
@@ -48,13 +48,36 @@ export default async (req: Request, res: Response) => {
     });
   }
 
-  const insert = mysql.insertOne(
+  const insert = await mysql.insertOne(
     "INSERT INTO `answers` SET answer = ?, question_id = ?, user_id = ?",
     [answer, questionId, req.session.userId!]
   );
 
   if (!insert) {
     res.json({ success: false, message: "Error saving answer" });
+  }
+
+  logger.info("Updating user's power token", {
+    questionId,
+    userId: req.session.userId,
+    powerToken,
+  });
+
+  /* If the user is clever they could trick the system here to change their power token, but for now
+  we will trust them. */
+  const powerTokenUpdate = powerToken
+    ? await mysql.query(
+        "UPDATE `power_tokens` SET `question_id` = ?, `date_applied` = NOW() WHERE `id` = ?",
+        [+questionId, powerToken.id]
+      )
+    : await mysql.query(
+        "UPDATE `power_tokens` SET `question_id` = NULL, `date_applied` = NOW() WHERE `user_id` = ? AND `question_id` = ?",
+        [req.session.userId!, +questionId]
+      );
+
+  if (!powerTokenUpdate) {
+    logger.error("Error updating power token", { tokenId: powerToken.id });
+    return res.json({ success: false });
   }
 
   return res.json({ success: true });

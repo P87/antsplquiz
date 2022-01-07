@@ -139,3 +139,13 @@ export interface MySQLStanding extends RowDataPacket {
   date_added: string;
   standings: string;
 }
+
+export interface PowerToken extends RowDataPacket {
+  id: number;
+  user_id: number;
+  date_added: string;
+  date_applied?: string;
+  type: "double" | "safe";
+  question_id?: number;
+  points?: number;
+}

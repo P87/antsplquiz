@@ -80,6 +80,7 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
         <NumberForm
           setErrorMessage={setErrorMessage}
           submitUrl={`/admin/questions/set-correct-text-answer/${questionId}`}
+          questionId={+questionId}
         />
       )}
       {question[0].answer_type === YESNO_TYPE && (

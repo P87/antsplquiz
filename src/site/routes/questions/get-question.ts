@@ -26,6 +26,15 @@ export default async (req: Request, res: Response) => {
       return res.json({ success: false });
     }
 
+    const powerTokens = await mysql.query(
+      "SELECT * FROM `power_tokens` WHERE user_id = ? LIMIT 2",
+      [req.session.userId!]
+    );
+
+    if (!powerTokens) {
+      return res.json({ success: false });
+    }
+
     if (question[0].answer_set_id) {
       if (question[0].answer_set_id === ALL_PLAYERS_TYPE) {
         const inString = answers.map((answer) => answer.answer_set_id);
@@ -51,6 +60,7 @@ export default async (req: Request, res: Response) => {
       question: question[0],
       answers: answers,
       setAnswers,
+      powerTokens,
     });
   } catch (err) {
     logger.error("Error getting active questions", { err });

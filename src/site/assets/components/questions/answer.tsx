@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Question, MySQLSetAnswer, MySQLAnswer } from "../../../../types";
+import {
+  Question,
+  MySQLSetAnswer,
+  MySQLAnswer,
+  PowerToken,
+} from "../../../../types";
 import { formatDateToEnglish } from "../utils";
 import * as Constants from "../../../constants";
 import { AnswerForm } from "./answerForm";
@@ -12,6 +17,7 @@ const AnswerQuestion = (): JSX.Element => {
   const [setAnswers, setSetAnswers] = useState<undefined | MySQLSetAnswer[]>();
   const [answer, setAnswer] = useState<undefined | MySQLAnswer[]>();
   const [deadline, setDeadline] = useState<Date>();
+  const [powerTokens, setPowerTokens] = useState<PowerToken[]>([]);
 
   useEffect(() => {
     const questionId = window.location.pathname.split("/")[3];
@@ -33,6 +39,7 @@ const AnswerQuestion = (): JSX.Element => {
           setQuestion(question);
           setSetAnswers(result.setAnswers);
           setDeadline(new Date(question.deadline));
+          setPowerTokens(result.powerTokens);
 
           if (question.answer_set_id === Constants.ALL_PLAYERS_TYPE) {
             setAnswer(result.answers);
@@ -87,6 +94,7 @@ const AnswerQuestion = (): JSX.Element => {
               setErrorMessage={setErrorMessage}
               setAnswers={setAnswers}
               savedAnswer={answer}
+              powerTokens={powerTokens}
             />
           ) : (
             <div className="alert alert-warning text-center" role="alert">
