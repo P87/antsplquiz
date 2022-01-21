@@ -27,8 +27,8 @@ export default async (req: Request, res: Response) => {
     }
 
     const powerTokens = await mysql.query(
-      "SELECT * FROM `power_tokens` WHERE user_id = ? LIMIT 2",
-      [req.session.userId!]
+      "SELECT * FROM `power_tokens` WHERE user_id = ? AND (`question_id` = ? OR `question_id` IS NULL) LIMIT 2",
+      [req.session.userId!, +question[0].id]
     );
 
     if (!powerTokens) {
