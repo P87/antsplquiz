@@ -1,5 +1,7 @@
-import { MySQLAnswer, MySQLSetAnswer } from "../../../../types";
+import { MySQLAnswer, MySQLSetAnswer, PowerToken } from "../../../../types";
 import React, { Dispatch, useEffect, useState } from "react";
+import PowerTokens from "./powerTokens";
+import PowerTokenWarning from "./powerTokenWarning";
 
 interface Props {
   answerAmount: number;
@@ -7,6 +9,8 @@ interface Props {
   setAnswers?: MySQLSetAnswer[];
   savedAnswer?: MySQLAnswer[];
   submitUrl: string;
+  questionId: number;
+  powerTokens?: PowerToken[];
 }
 
 const TeamsForm = ({
@@ -15,11 +19,14 @@ const TeamsForm = ({
   setErrorMessage,
   savedAnswer,
   submitUrl,
+  powerTokens,
+  questionId,
 }: Props): JSX.Element => {
   const [answer, setAnswer] = useState<any[]>([]);
   const [submitting, setSubmitting] = useState(false);
   const [success, setSuccess] = useState<boolean>(false);
   const [loadedSavedAnswer, setLoadedSavedAnswer] = useState(false);
+  const [powerToken, setPowerToken] = useState<PowerToken>();
 
   useEffect(() => {
     if (savedAnswer && !loadedSavedAnswer) {
@@ -47,6 +54,7 @@ const TeamsForm = ({
       },
       body: JSON.stringify({
         answer: answer,
+        powerToken,
       }),
     })
       .then((res) => res.json())
@@ -65,6 +73,14 @@ const TeamsForm = ({
 
   if (submitting) {
     return <div className="text-center">Submitting...</div>;
+  }
+
+  if (success) {
+    return (
+      <div className="alert alert-success text-center" role="alert">
+        Answer Saved.
+      </div>
+    );
   }
 
   if (!setAnswers || !setAnswers.length) {
@@ -102,16 +118,26 @@ const TeamsForm = ({
 
   return (
     <div>
-      {success && (
-        <div className="alert alert-success text-center" role="alert">
-          Answer Saved.
-        </div>
+      {!!powerTokens && !!powerTokens.length && (
+        <PowerTokens
+          powerTokens={powerTokens}
+          setPowerToken={setPowerToken}
+          questionId={questionId}
+        />
       )}
       {inputs}
       {answer.length === answerAmount && answer.every((a) => a !== "") && (
-        <div className="mt-4 text-center">
+        <div
+          className={`mt-4 text-center ${
+            powerToken ? "alert alert-warning" : ""
+          }`}
+        >
+          <PowerTokenWarning
+            powerToken={powerToken}
+            savedAnswer={!!savedAnswer?.length}
+          />
           <button
-            className="btn btn-success"
+            className={`btn btn-success ${powerToken ? "mt-4" : ""}`}
             type="button"
             onClick={handleSubmit}
           >

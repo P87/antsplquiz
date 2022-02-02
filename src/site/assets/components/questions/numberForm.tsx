@@ -1,6 +1,7 @@
 import { MySQLAnswer, PowerToken } from "../../../../types";
 import React, { Dispatch, useEffect, useState } from "react";
 import PowerTokens from "./powerTokens";
+import PowerTokenWarning from "./powerTokenWarning";
 
 interface Props {
   setErrorMessage: Dispatch<React.SetStateAction<string>>;
@@ -64,20 +65,16 @@ const NumberForm = ({
     return <div className="text-center">Submitting...</div>;
   }
 
-  const isChangingTokenValue =
-    powerToken &&
-    powerTokens?.some(
-      (token) =>
-        token.question_id === questionId && token.type !== powerToken.type
+  if (success) {
+    return (
+      <div className="alert alert-success text-center" role="alert">
+        Answer Saved.
+      </div>
     );
+  }
 
   return (
     <div>
-      {success && (
-        <div className="alert alert-success text-center" role="alert">
-          Answer Saved.
-        </div>
-      )}
       {!!powerTokens && !!powerTokens.length && (
         <PowerTokens
           powerTokens={powerTokens}
@@ -99,26 +96,18 @@ const NumberForm = ({
           Your Answer
         </label>
       </div>
-      {answer && (
+      {answer && answer !== "" && (
         <div
           className={`mt-4 text-center ${
-            isChangingTokenValue ? "alert alert-warning" : ""
+            powerToken ? "alert alert-warning" : ""
           }`}
         >
-          {powerToken && isChangingTokenValue && (
-            <>
-              <span>
-                You are about to use your{" "}
-                {powerToken.type === "double"
-                  ? `"Go big or go home"`
-                  : `"Play it safe"`}{" "}
-                power token
-              </span>
-              <br />
-            </>
-          )}
+          <PowerTokenWarning
+            powerToken={powerToken}
+            savedAnswer={!!savedAnswer?.length}
+          />
           <button
-            className={`btn btn-success ${isChangingTokenValue ? "mt-4" : ""}`}
+            className={`btn btn-success ${powerToken ? "mt-4" : ""}`}
             type="button"
             onClick={handleSubmit}
           >

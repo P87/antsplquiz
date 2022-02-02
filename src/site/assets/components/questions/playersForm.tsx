@@ -1,5 +1,7 @@
-import { MySQLSetAnswer } from "../../../../types";
+import { MySQLSetAnswer, PowerToken } from "../../../../types";
 import React, { Dispatch, useEffect, useState } from "react";
+import PowerTokens from "./powerTokens";
+import PowerTokenWarning from "./powerTokenWarning";
 
 interface Props {
   setErrorMessage: Dispatch<React.SetStateAction<string>>;
@@ -7,6 +9,8 @@ interface Props {
   savedAnswer?: MySQLSetAnswer[];
   submitUrl: string;
   answerAmount: number;
+  questionId: number;
+  powerTokens?: PowerToken[];
 }
 
 const searchTimeoutLength = 1500;
@@ -19,6 +23,8 @@ const PlayersForm = ({
   savedAnswer,
   setAnswers,
   submitUrl,
+  powerTokens,
+  questionId,
 }: Props): JSX.Element => {
   const [answer, setAnswer] = useState<MySQLSetAnswer[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -26,6 +32,7 @@ const PlayersForm = ({
   const [loadedSavedAnswer, setLoadedSavedAnswer] = useState(false);
   const [searchText, setSearchText] = useState("");
   const [foundPlayers, setFoundPlayers] = useState<MySQLSetAnswer[]>([]);
+  const [powerToken, setPowerToken] = useState<PowerToken>();
 
   useEffect(() => {
     if (savedAnswer && setAnswers && !loadedSavedAnswer) {
@@ -89,6 +96,7 @@ const PlayersForm = ({
       },
       body: JSON.stringify({
         answer,
+        powerToken,
       }),
     })
       .then((res) => res.json())
@@ -109,12 +117,22 @@ const PlayersForm = ({
     return <div className="text-center">Submitting...</div>;
   }
 
+  if (success) {
+    return (
+      <div className="alert alert-success text-center" role="alert">
+        Answer Saved.
+      </div>
+    );
+  }
+
   return (
     <div>
-      {success && (
-        <div className="alert alert-success text-center" role="alert">
-          Answer Saved.
-        </div>
+      {!!powerTokens && !!powerTokens.length && (
+        <PowerTokens
+          powerTokens={powerTokens}
+          setPowerToken={setPowerToken}
+          questionId={questionId}
+        />
       )}
       <div className="alert alert-warning text-center" role="alert">
         Start typing the name of the player you want and select them from the
@@ -183,9 +201,17 @@ const PlayersForm = ({
         ))}
       </ul>
       {answer.length === answerAmount && (
-        <div className="mt-4 text-center">
+        <div
+          className={`mt-4 text-center ${
+            powerToken ? "alert alert-warning" : ""
+          }`}
+        >
+          <PowerTokenWarning
+            powerToken={powerToken}
+            savedAnswer={!!savedAnswer?.length}
+          />
           <button
-            className="btn btn-success"
+            className={`btn btn-success ${powerToken ? "mt-4" : ""}`}
             type="button"
             onClick={handleSubmit}
           >

@@ -45,6 +45,8 @@ export const AnswerForm = ({
           setErrorMessage={setErrorMessage}
           savedAnswer={savedAnswer as MySQLAnswer[]}
           submitUrl={`/questions/set-text-answer/${question.id}`}
+          powerTokens={powerTokens}
+          questionId={question.id}
         />
       );
     case Constants.CORRECT_SCORE_TYPE:
@@ -53,6 +55,8 @@ export const AnswerForm = ({
           setErrorMessage={setErrorMessage}
           savedAnswer={savedAnswer as MySQLAnswer[]}
           submitUrl={`/questions/set-text-answer/${question.id}`}
+          powerTokens={powerTokens}
+          questionId={question.id}
         />
       );
     case null:
@@ -64,6 +68,8 @@ export const AnswerForm = ({
             savedAnswer={savedAnswer as MySQLAnswer[]}
             setAnswers={setAnswers}
             submitUrl={`/questions/set-teams-answer/${question.id}`}
+            powerTokens={powerTokens}
+            questionId={question.id}
           />
         );
       } else if (question.answer_set_id === Constants.ALL_PLAYERS_TYPE) {
@@ -74,6 +80,8 @@ export const AnswerForm = ({
             setAnswers={setAnswers}
             savedAnswer={savedAnswer as MySQLSetAnswer[]}
             submitUrl={`/questions/set-players-answer/${question.id}`}
+            powerTokens={powerTokens}
+            questionId={question.id}
           />
         );
       } else if (question.answer_set_id === Constants.ALL_MANAGERS_TYPE) {
@@ -84,6 +92,8 @@ export const AnswerForm = ({
             setAnswers={setAnswers}
             savedAnswer={savedAnswer as MySQLAnswer[]}
             submitUrl={`/questions/set-managers-answer/${question.id}`}
+            powerTokens={powerTokens}
+            questionId={question.id}
           />
         );
       }

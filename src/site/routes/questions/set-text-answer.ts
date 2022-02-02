@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import * as mysql from "../../utils/mysql";
 import logger from "../../utils/logger";
+import { savePowerToken } from "../../utils/questionUtils";
 
 export default async (req: Request, res: Response) => {
   const questionId = req.params.questionId;
@@ -57,28 +58,11 @@ export default async (req: Request, res: Response) => {
     res.json({ success: false, message: "Error saving answer" });
   }
 
-  logger.info("Updating user's power token", {
-    questionId,
-    userId: req.session.userId,
+  const powerTokenUpdate = savePowerToken(
     powerToken,
-  });
+    +questionId,
+    req.session.userId!
+  );
 
-  /* If the user is clever they could trick the system here to change their power token, but for now
-  we will trust them. */
-  const powerTokenUpdate = powerToken
-    ? await mysql.query(
-        "UPDATE `power_tokens` SET `question_id` = ?, `date_applied` = NOW() WHERE `id` = ?",
-        [+questionId, powerToken.id]
-      )
-    : await mysql.query(
-        "UPDATE `power_tokens` SET `question_id` = NULL, `date_applied` = NOW() WHERE `user_id` = ? AND `question_id` = ?",
-        [req.session.userId!, +questionId]
-      );
-
-  if (!powerTokenUpdate) {
-    logger.error("Error updating power token", { tokenId: powerToken.id });
-    return res.json({ success: false });
-  }
-
-  return res.json({ success: true });
+  return res.json({ success: !!powerTokenUpdate });
 };

@@ -2,10 +2,11 @@ import { Request, Response } from "express";
 import * as mysql from "../../utils/mysql";
 import { MySQLSetAnswer } from "../../../types";
 import logger from "../../utils/logger";
+import { savePowerToken } from "../../utils/questionUtils";
 
 export default async (req: Request, res: Response) => {
   const questionId = req.params.questionId;
-  const { answer } = req.body;
+  const { answer, powerToken } = req.body;
 
   logger.info("Attempting answer insert", {
     userId: req.session.userId,
@@ -63,5 +64,11 @@ export default async (req: Request, res: Response) => {
     }
   });
 
-  return res.json({ success: true });
+  const powerTokenUpdate = savePowerToken(
+    powerToken,
+    +questionId,
+    req.session.userId!
+  );
+
+  return res.json({ success: !!powerTokenUpdate });
 };

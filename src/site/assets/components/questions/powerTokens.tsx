@@ -62,7 +62,7 @@ const PowerTokens = ({
       {(!doubleToken?.question_id || !safeToken?.question_id) && (
         <span>You have power tokens available to use:</span>
       )}
-      { doubleToken &&
+      {doubleToken && (
         <div className="col-6 text-center">
           <div
             className={`border border-1 border-dark pt-3 pb-3 power-token bg-primary text-white ${
@@ -81,9 +81,9 @@ const PowerTokens = ({
             (Double points)
           </div>
         </div>
-      }
+      )}
 
-      { safeToken &&
+      {safeToken && (
         <div className="col-6 text-center">
           <div
             className={`border border-1 border-dark pt-3 pb-3 power-token bg-primary text-white ${
@@ -98,10 +98,10 @@ const PowerTokens = ({
             <br />
             <span className="fw-bold">Play it safe</span>
             <br />
-            (Cannot score less than 0)
+            (Cannot score &lt; 0)
           </div>
         </div>
-      }
+      )}
     </div>
   );
 };

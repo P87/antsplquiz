@@ -16,7 +16,7 @@ import YesNoForm from "../questions/yesNoForm";
 import ManagersForm from "../questions/managersForm";
 import Loading from "../loading";
 
-const questionId = window.location.pathname.split("/")[4];
+const questionId = +window.location.pathname.split("/")[4];
 
 const SetCorrectAnswer: React.FunctionComponent = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -74,19 +74,21 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
         <CorrectScoreForm
           submitUrl={`/admin/questions/set-correct-text-answer/${questionId}`}
           setErrorMessage={setErrorMessage}
+          questionId={questionId}
         />
       )}
       {question[0].answer_type === NUMBER_TYPE && (
         <NumberForm
           setErrorMessage={setErrorMessage}
           submitUrl={`/admin/questions/set-correct-text-answer/${questionId}`}
-          questionId={+questionId}
+          questionId={questionId}
         />
       )}
       {question[0].answer_type === YESNO_TYPE && (
         <YesNoForm
           setErrorMessage={setErrorMessage}
           submitUrl={`/admin/questions/set-correct-text-answer/${questionId}`}
+          questionId={questionId}
         />
       )}
       {question[0].answer_set_id === ALL_PLAYERS_TYPE && (
@@ -94,6 +96,7 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
           answerAmount={question[0].answer_amount}
           setErrorMessage={setErrorMessage}
           submitUrl={`/admin/questions/set-correct-players-answer/${questionId}`}
+          questionId={questionId}
         />
       )}
       {question[0].answer_set_id === ALL_TEAMS_TYPE && (
@@ -102,6 +105,7 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
           setErrorMessage={setErrorMessage}
           submitUrl={`/admin/questions/set-correct-teams-answer/${questionId}`}
           setAnswers={setAnswers}
+          questionId={questionId}
         />
       )}
       {question[0].answer_set_id === ALL_MANAGERS_TYPE && (
@@ -110,6 +114,7 @@ const SetCorrectAnswer: React.FunctionComponent = () => {
           setErrorMessage={setErrorMessage}
           setAnswers={setAnswers}
           submitUrl={`/admin/questions/set-correct-managers-answer/${questionId}`}
+          questionId={questionId}
         />
       )}
     </>
