@@ -14,9 +14,14 @@ export default async (req: Request, res: Response) => {
     }
 
     const questions = await mysql.query(
-      "SELECT `q`.`id`, `q`.`question`, `q`.`answer_set_id`, `q`.`answer_type`, `q`.`answer_amount`, `q`.`deadline`, `q`.`points`, `a`.`answer`, `a`.`answer_set_id`, `ans`.`answer` as `user_answer`, `a`.`correct`, ap.`points` as `added_points` " +
-        "FROM `questions` `q` LEFT JOIN `answers` `a` ON `q`.id = `a`.`question_id` AND `a`.`user_id` = ? AND `a`.`final_answer` = true " +
-        "LEFT JOIN `answer_set_answers` `ans` ON `ans`.`id` = `a`.`answer_set_id` LEFT JOIN `added_points` ap ON ap.`question_id` = q.`id` AND ap.`user_id` = a.`user_id`",
+      "SELECT `q`.`id`, `q`.`question`, `q`.`answer_set_id`, `q`.`answer_type`, `q`.`answer_amount`, `q`.`deadline`, `q`.`points`, " +
+        "`a`.`answer`, `a`.`answer_set_id`, `ans`.`answer` as `user_answer`, `a`.`correct`, ap.`points` as `added_points`, " +
+        "pt.`type` as power_token " +
+        "FROM `questions` `q` " +
+        "LEFT JOIN `answers` `a` ON `q`.id = `a`.`question_id` AND `a`.`user_id` = ? AND `a`.`final_answer` = true " +
+        "LEFT JOIN `answer_set_answers` `ans` ON `ans`.`id` = `a`.`answer_set_id` " +
+        "LEFT JOIN `added_points` ap ON ap.`question_id` = q.`id` AND ap.`user_id` = a.`user_id` " +
+        "LEFT JOIN `power_tokens` pt ON a.`user_id` = pt.`user_id` AND q.`id` = pt.`question_id`",
       [req.params.userId]
     );
     if (!questions) {
