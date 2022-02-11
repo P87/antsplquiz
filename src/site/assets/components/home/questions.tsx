@@ -6,27 +6,12 @@ import {
   Dictionary,
 } from "../../../../types";
 import { formatDateToEnglish } from "../utils";
+import UsedPowerToken from "./usedPowerToken";
+import PreviousNav from "./previousNav";
+import QuestionsNav from "./questionsNav";
+import ActiveQuestionBox from "./activeQuestionBox";
 
-interface NavProps {
-  onPreviousQuestionsClick: (e: React.SyntheticEvent) => Promise<void>;
-  onActiveQuestionsClick: (e: React.SyntheticEvent) => void;
-  onUnansweredQuestionsClick: (e: React.SyntheticEvent) => void;
-  activeTab: Tabs;
-  unansweredCount: number;
-}
-
-interface PreviousNavProps {
-  activeTab: Tabs;
-  onTabClick: (tab: Tabs, e: React.SyntheticEvent) => void;
-}
-
-interface ActiveQuestionProps {
-  hasAnswered: boolean;
-  question: ActiveQuestion;
-  activeAnswer: ActiveAnswer[];
-}
-
-enum Tabs {
+export enum Tabs {
   UNANSWERED,
   ACTIVE,
   PREVIOUS,
@@ -258,6 +243,7 @@ const Questions = (): JSX.Element => {
                                   )
                                 )}
                             </ul>
+                            <UsedPowerToken powerToken={question.power_token} />
                           </div>
                           {correct && (
                             <div className="col-12">
@@ -301,142 +287,6 @@ const Questions = (): JSX.Element => {
           <div className="col">No Previous Questions</div>
         ))}
     </div>
-  );
-};
-
-export const QuestionsNav = ({
-  onPreviousQuestionsClick,
-  onActiveQuestionsClick,
-  onUnansweredQuestionsClick,
-  activeTab,
-  unansweredCount,
-}: NavProps): JSX.Element => {
-  return (
-    <div className="row mt-4">
-      <ul className="nav nav-tabs mb-3">
-        <li className="nav-item">
-          <a
-            className={
-              activeTab === Tabs.UNANSWERED ? "nav-link active" : "nav-link"
-            }
-            href="/"
-            onClick={onUnansweredQuestionsClick}
-          >
-            Unanswered
-            {unansweredCount > 0 && (
-              <span className="badge bg-danger ms-1 rounded-pill">
-                {unansweredCount}
-              </span>
-            )}
-          </a>
-        </li>
-        <li className="nav-item">
-          <a
-            className={
-              activeTab === Tabs.ACTIVE ? "nav-link active" : "nav-link"
-            }
-            href="/"
-            onClick={onActiveQuestionsClick}
-          >
-            Active
-          </a>
-        </li>
-        <li className="nav-item">
-          <a
-            className={
-              activeTab === Tabs.PREVIOUS ? "nav-link active" : "nav-link"
-            }
-            href="#"
-            onClick={onPreviousQuestionsClick}
-          >
-            Previous
-          </a>
-        </li>
-      </ul>
-    </div>
-  );
-};
-
-export const ActiveQuestionBox = ({
-  hasAnswered,
-  question,
-  activeAnswer,
-}: ActiveQuestionProps): JSX.Element => {
-  return (
-    <div className="mb-3">
-      <div className="row p-2 border bg-primary fw-bold text-light border-dark">
-        <div className="col-10">Max Points</div>
-        <div className="col-2 text-end">
-          {question.points * question.answer_amount}
-        </div>
-      </div>
-      <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
-        <div className="col-12">{question.question}</div>
-      </div>
-      <div className="row p-2 border border-top-0 fw-bold border-bottom-0 border-dark">
-        <div className="col-12">
-          Deadline: {formatDateToEnglish(question.deadline)}
-        </div>
-      </div>
-      {hasAnswered && (
-        <div className="row p-2 border border-top-0 border-bottom-0 border-dark">
-          <div className="col-12">
-            Your Answer:
-            <ul>
-              {activeAnswer &&
-                Object.values(activeAnswer).map((answer) => (
-                  <li>{answer.name || answer.answer}</li>
-                ))}
-            </ul>
-          </div>
-        </div>
-      )}
-      <div className="row p-2 border border-top-0 text-center border-dark">
-        <div className="col-12">
-          <div className="d-grid gap-2">
-            <a
-              href={`/questions/answer/${question.id}`}
-              className="btn btn-success"
-              role="button"
-            >
-              {hasAnswered && "Edit"} Answer
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-};
-
-export const PreviousNav = ({
-  activeTab,
-  onTabClick,
-}: PreviousNavProps): JSX.Element => {
-  return (
-    <ul className="nav nav-tabs mb-3">
-      <li className="nav-item">
-        <a
-          className={
-            activeTab === Tabs.UNSETTLED ? "nav-link active" : "nav-link"
-          }
-          href="#"
-          onClick={onTabClick.bind(this, Tabs.UNSETTLED)}
-        >
-          Unsettled
-        </a>
-      </li>
-      <li className="nav-item">
-        <a
-          className={
-            activeTab === Tabs.SETTLED ? "nav-link active" : "nav-link"
-          }
-          href="#"
-          onClick={onTabClick.bind(this, Tabs.SETTLED)}
-        >
-          Settled
-        </a>
-      </li>
-    </ul>
   );
 };
 

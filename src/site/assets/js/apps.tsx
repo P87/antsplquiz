@@ -9,6 +9,7 @@ import UsersAdmin from "../components/admin/users";
 import UserAdmin from "../components/admin/user";
 import StandingsAdmin from "../components/admin/standings";
 import LeagueTable from "../components/leagueTable";
+import PowerTokens from "../components/admin/powerTokens";
 
 const adminQuestionsContainer = document.getElementById("admin-questions");
 const questionsContainer = document.getElementById("questions-container");
@@ -25,6 +26,7 @@ const adminUsersContainer = document.getElementById("admin-users");
 const adminUserContainer = document.getElementById("admin-user");
 const adminStandingsContainer = document.getElementById("admin-standings");
 const leaderBoardContainer = document.getElementById("leader-board");
+const adminPowerTokensContainer = document.getElementById("admin-power-tokens");
 
 if (adminQuestionsContainer) {
   renderQuestionsAdmin();
@@ -60,6 +62,10 @@ if (adminStandingsContainer) {
 
 if (leaderBoardContainer) {
   ReactDOM.render(<LeagueTable />, leaderBoardContainer);
+}
+
+if (adminPowerTokensContainer) {
+  ReactDOM.render(<PowerTokens />, adminPowerTokensContainer);
 }
 
 async function renderQuestionsAdmin() {

@@ -24,9 +24,6 @@
                   <a <% if (section === "home") { %>class="nav-link active" aria-current="page"<% } else { %>class="nav-link"<% } %> href="/">Home</a>
                 </li>
                 <% if (loggedIn) { %>
-                  <!-- <li class="nav-item">
-                    <a class="nav-link" href="/leaderboard">Leaderboard</a>
-                  </li> -->
                   <% if (locals.isAdmin) { %>
                     <li class="nav-item dropdown">
                       <a
@@ -43,6 +40,7 @@
                         <li><a class="dropdown-item" href="/admin/questions">Questions</a></li>
                         <li><a class="dropdown-item" href="/admin/users">Users</a></li>
                         <li><a class="dropdown-item" href=/admin/standings>League Table</a></li>
+                          <li><a class="dropdown-item" href="/admin/power-tokens">Power Tokens</a></li>
                       </ul>
                     </li> 
                   <% } %>

@@ -1,8 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Question, MySQLSetAnswer, MySQLAnswer } from "../../../../types";
+import {
+  Question,
+  MySQLSetAnswer,
+  MySQLAnswer,
+  PowerToken,
+} from "../../../../types";
 import { formatDateToEnglish } from "../utils";
 import * as Constants from "../../../constants";
 import { AnswerForm } from "./answerForm";
+import Loading from "../loading";
 
 const AnswerQuestion = (): JSX.Element => {
   const [question, setQuestion] = useState<undefined | Question>();
@@ -11,6 +17,7 @@ const AnswerQuestion = (): JSX.Element => {
   const [setAnswers, setSetAnswers] = useState<undefined | MySQLSetAnswer[]>();
   const [answer, setAnswer] = useState<undefined | MySQLAnswer[]>();
   const [deadline, setDeadline] = useState<Date>();
+  const [powerTokens, setPowerTokens] = useState<PowerToken[]>([]);
 
   useEffect(() => {
     const questionId = window.location.pathname.split("/")[3];
@@ -32,6 +39,7 @@ const AnswerQuestion = (): JSX.Element => {
           setQuestion(question);
           setSetAnswers(result.setAnswers);
           setDeadline(new Date(question.deadline));
+          setPowerTokens(result.powerTokens);
 
           if (question.answer_set_id === Constants.ALL_PLAYERS_TYPE) {
             setAnswer(result.answers);
@@ -53,16 +61,7 @@ const AnswerQuestion = (): JSX.Element => {
   }, []);
 
   if (isLoading) {
-    return (
-      <div className="d-flex align-items-center pt-5 pb-5">
-        <strong>Loading...</strong>
-        <div
-          className="spinner-border ms-auto text-warning"
-          role="status"
-          aria-hidden="true"
-        ></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
@@ -95,6 +94,7 @@ const AnswerQuestion = (): JSX.Element => {
               setErrorMessage={setErrorMessage}
               setAnswers={setAnswers}
               savedAnswer={answer}
+              powerTokens={powerTokens}
             />
           ) : (
             <div className="alert alert-warning text-center" role="alert">

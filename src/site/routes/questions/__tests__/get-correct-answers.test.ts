@@ -6,12 +6,12 @@ import { ALL_MANAGERS_TYPE, ALL_TEAMS_TYPE } from "../../../constants";
 
 const mockRequest = {
   params: {
-    questionId: 1
-  }
+    questionId: 1,
+  },
 } as unknown as Request;
 
 const mockResponse = {
-  json: jest.fn()
+  json: jest.fn(),
 } as unknown as Response;
 
 describe("Get correct answers post request", () => {
@@ -27,7 +27,7 @@ describe("Get correct answers post request", () => {
       answer_type: "yesno",
       correct_answer: "yes",
       points: 100,
-      question: "Yes or no"
+      question: "Yes or no",
     };
 
     jest
@@ -39,7 +39,7 @@ describe("Get correct answers post request", () => {
     expect(mockResponse.json).toHaveBeenCalledWith({
       success: true,
       question: [question],
-      setAnswers: []
+      setAnswers: [],
     });
   });
 
@@ -51,25 +51,30 @@ describe("Get correct answers post request", () => {
       answer_type: null,
       correct_answer: null,
       points: 100,
-      question: "Name a team"
+      question: "Name a team",
     };
 
     const setAnswers = {
-        answer: "Arsenal",
-        id: 1,
-        set_id: ALL_TEAMS_TYPE
-      };
+      answer: "Arsenal",
+      id: 1,
+      set_id: ALL_TEAMS_TYPE,
+    };
 
-    jest.spyOn(mysql, "query")
-      .mockImplementationOnce(() => Promise.resolve([question as RowDataPacket]))
-      .mockImplementationOnce(() => Promise.resolve([setAnswers as RowDataPacket]));
+    jest
+      .spyOn(mysql, "query")
+      .mockImplementationOnce(() =>
+        Promise.resolve([question as RowDataPacket])
+      )
+      .mockImplementationOnce(() =>
+        Promise.resolve([setAnswers as RowDataPacket])
+      );
 
     await request(mockRequest, mockResponse);
 
     expect(mockResponse.json).toHaveBeenCalledWith({
       success: true,
       question: [question],
-      setAnswers: [setAnswers]
+      setAnswers: [setAnswers],
     });
   });
 
@@ -81,34 +86,39 @@ describe("Get correct answers post request", () => {
       answer_type: null,
       correct_answer: null,
       points: 100,
-      question: "Name a team"
+      question: "Name a team",
     };
 
     const setAnswers = {
       answer: "Luke Shaw",
       id: 1,
-      set_id: ALL_MANAGERS_TYPE
+      set_id: ALL_MANAGERS_TYPE,
     };
 
-    jest.spyOn(mysql, "query")
-      .mockImplementationOnce(() => Promise.resolve([question as RowDataPacket]))
-      .mockImplementationOnce(() => Promise.resolve([setAnswers as RowDataPacket]));
+    jest
+      .spyOn(mysql, "query")
+      .mockImplementationOnce(() =>
+        Promise.resolve([question as RowDataPacket])
+      )
+      .mockImplementationOnce(() =>
+        Promise.resolve([setAnswers as RowDataPacket])
+      );
 
     await request(mockRequest, mockResponse);
 
     expect(mockResponse.json).toHaveBeenCalledWith({
       success: true,
       question: [question],
-      setAnswers: [setAnswers]
+      setAnswers: [setAnswers],
     });
   });
 
   it("Returns an unsuccessful result when the question query fails", async () => {
-    jest.spyOn(mysql, 'query').mockImplementation(() => Promise.resolve(false))
+    jest.spyOn(mysql, "query").mockImplementation(() => Promise.resolve(false));
 
     await request(mockRequest, mockResponse);
 
-    expect(mockResponse.json).toHaveBeenCalledWith({ success: false })
+    expect(mockResponse.json).toHaveBeenCalledWith({ success: false });
   });
 
   it("Returns an unsuccessful result when the answer set query fails", async () => {
@@ -119,15 +129,18 @@ describe("Get correct answers post request", () => {
       answer_type: null,
       correct_answer: null,
       points: 100,
-      question: "Name a team"
+      question: "Name a team",
     };
 
-    jest.spyOn(mysql, "query")
-      .mockImplementationOnce(() => Promise.resolve([question as RowDataPacket]))
+    jest
+      .spyOn(mysql, "query")
+      .mockImplementationOnce(() =>
+        Promise.resolve([question as RowDataPacket])
+      )
       .mockImplementationOnce(() => Promise.resolve(false));
 
     await request(mockRequest, mockResponse);
 
-    expect(mockResponse.json).toHaveBeenCalledWith({ success: false })
+    expect(mockResponse.json).toHaveBeenCalledWith({ success: false });
   });
 });

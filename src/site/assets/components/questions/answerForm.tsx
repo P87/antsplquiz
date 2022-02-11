@@ -1,6 +1,11 @@
 import * as Constants from "../../../constants";
 import NumberForm from "./numberForm";
-import { MySQLAnswer, MySQLSetAnswer, Question } from "../../../../types";
+import {
+  MySQLAnswer,
+  MySQLSetAnswer,
+  PowerToken,
+  Question,
+} from "../../../../types";
 import YesNoForm from "./yesNoForm";
 import CorrectScoreForm from "./correctScoreForm";
 import TeamsForm from "./teamsForm";
@@ -13,6 +18,7 @@ interface FormProps {
   setErrorMessage: Dispatch<React.SetStateAction<string>>;
   setAnswers?: MySQLSetAnswer[];
   savedAnswer?: MySQLAnswer[] | MySQLSetAnswer[];
+  powerTokens: PowerToken[];
 }
 
 export const AnswerForm = ({
@@ -20,6 +26,7 @@ export const AnswerForm = ({
   setErrorMessage,
   setAnswers,
   savedAnswer,
+  powerTokens,
 }: FormProps): JSX.Element => {
   switch (question.answer_type) {
     case Constants.NUMBER_TYPE:
@@ -28,6 +35,8 @@ export const AnswerForm = ({
           setErrorMessage={setErrorMessage}
           savedAnswer={savedAnswer as MySQLAnswer[]}
           submitUrl={`/questions/set-text-answer/${question.id}`}
+          powerTokens={powerTokens}
+          questionId={question.id}
         />
       );
     case Constants.YESNO_TYPE:
@@ -36,6 +45,8 @@ export const AnswerForm = ({
           setErrorMessage={setErrorMessage}
           savedAnswer={savedAnswer as MySQLAnswer[]}
           submitUrl={`/questions/set-text-answer/${question.id}`}
+          powerTokens={powerTokens}
+          questionId={question.id}
         />
       );
     case Constants.CORRECT_SCORE_TYPE:
@@ -44,6 +55,8 @@ export const AnswerForm = ({
           setErrorMessage={setErrorMessage}
           savedAnswer={savedAnswer as MySQLAnswer[]}
           submitUrl={`/questions/set-text-answer/${question.id}`}
+          powerTokens={powerTokens}
+          questionId={question.id}
         />
       );
     case null:
@@ -55,6 +68,8 @@ export const AnswerForm = ({
             savedAnswer={savedAnswer as MySQLAnswer[]}
             setAnswers={setAnswers}
             submitUrl={`/questions/set-teams-answer/${question.id}`}
+            powerTokens={powerTokens}
+            questionId={question.id}
           />
         );
       } else if (question.answer_set_id === Constants.ALL_PLAYERS_TYPE) {
@@ -65,6 +80,8 @@ export const AnswerForm = ({
             setAnswers={setAnswers}
             savedAnswer={savedAnswer as MySQLSetAnswer[]}
             submitUrl={`/questions/set-players-answer/${question.id}`}
+            powerTokens={powerTokens}
+            questionId={question.id}
           />
         );
       } else if (question.answer_set_id === Constants.ALL_MANAGERS_TYPE) {
@@ -75,6 +92,8 @@ export const AnswerForm = ({
             setAnswers={setAnswers}
             savedAnswer={savedAnswer as MySQLAnswer[]}
             submitUrl={`/questions/set-managers-answer/${question.id}`}
+            powerTokens={powerTokens}
+            questionId={question.id}
           />
         );
       }

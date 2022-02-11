@@ -6,8 +6,16 @@ export default async (req: Request, res: Response) => {
   try {
     const date = mysql.convertDate(new Date());
     const questions = await mysql.query(
-      "SELECT `q`.`id`, `q`.`question`, `q`.`answer_set_id`, `q`.`answer_type`, `q`.`answer_amount`, `q`.`deadline`, `q`.`points`, `a`.`answer`, `a`.`answer_set_id`, `a`.`correct`, `ans`.`answer` as `user_answer`, `ap`.`points` as `added_points` FROM `questions` `q` LEFT JOIN `answers` `a` ON `q`.id = `a`.`question_id` AND `a`.`user_id` = ? AND `a`.`final_answer` = true LEFT JOIN `answer_set_answers` `ans` ON `ans`.`id` = `a`.`answer_set_id` LEFT JOIN `added_points` `ap` ON `q`.`id` = `ap`.`question_id` AND `ap`.`user_id` = ? WHERE `q`.`deadline` < ?",
-      [req.session.userId!, req.session.userId!, date]
+      "SELECT `q`.`id`, `q`.`question`, `q`.`answer_set_id`, `q`.`answer_type`, `q`.`answer_amount`, `q`.`deadline`, `q`.`points`, " +
+        "`a`.`answer`, `a`.`answer_set_id`, `a`.`correct`, " +
+        "pt.`type` as power_token, " +
+        "`ans`.`answer` as `user_answer`, `ap`.`points` as `added_points` " +
+        "FROM `questions` `q` LEFT JOIN `answers` `a` ON `q`.id = `a`.`question_id` AND `a`.`user_id` = ? AND `a`.`final_answer` = true " +
+        "LEFT JOIN `answer_set_answers` `ans` ON `ans`.`id` = `a`.`answer_set_id` " +
+        "LEFT JOIN `added_points` `ap` ON `q`.`id` = `ap`.`question_id` AND `ap`.`user_id` = a.`user_id` " +
+        "LEFT JOIN `power_tokens` pt ON a.`user_id` = pt.`user_id` AND q.`id` = pt.`question_id` " +
+        "WHERE `q`.`deadline` < ?",
+      [req.session.userId!, date]
     );
     if (!questions) {
       throw new Error("Error getting previous questions");

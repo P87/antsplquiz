@@ -1,3 +1,7 @@
 .lh58 {
   line-height: 58px;
 }
+
+.power-token {
+  cursor: pointer;
+}

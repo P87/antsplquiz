@@ -83,6 +83,17 @@ CREATE TABLE IF NOT EXISTS `added_points` (
     `date_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (`id`)
 );
+CREATE TABLE IF NOT EXISTS `power_tokens` (
+    `id` INT NOT NULL AUTO_INCREMENT,
+    `user_id` INT NOT NULL,
+    `date_added` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `date_applied` TIMESTAMP,
+    `type` ENUM('safe', 'double'),
+    `question_id` INT,
+    `points` INT DEFAULT 0,
+    UNIQUE KEY `user_type` (`user_id`, `type`),
+    PRIMARY KEY (`id`)
+);
 
 INSERT IGNORE INTO `answer_sets` SET `name` = "All Teams";
 INSERT IGNORE INTO `answer_sets` SET `name` = "All Players";

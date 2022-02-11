@@ -1,13 +1,13 @@
 import { Router } from "express";
 import home from "./home";
-import generateLeageTable from "./generateLeageTable";
-import getLeagueTable from "./getLeagueTable";
+import generateLeagueTable from "./generate-league-table";
+import getLeagueTable from "./get-league-table";
 
 const routes = Router();
 
 routes.get("/", home);
 
-routes.post("/generate-league-table", generateLeageTable);
+routes.post("/generate-league-table", generateLeagueTable);
 routes.post("/get-league-table", getLeagueTable);
 
 export default routes;

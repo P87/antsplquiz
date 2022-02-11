@@ -76,6 +76,7 @@ export interface ActiveQuestion {
   question: string;
   user_answer: string;
   added_points: null | number;
+  power_token: null | PowerTokenType;
 }
 
 export interface ActiveAnswer {
@@ -138,4 +139,14 @@ export interface MySQLStanding extends RowDataPacket {
   id: number;
   date_added: string;
   standings: string;
+}
+
+export interface PowerToken extends RowDataPacket {
+  id: number;
+  user_id: number;
+  date_added: string;
+  date_applied?: string;
+  type: PowerTokenType;
+  question_id?: number;
+  points?: number;
 }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { MySQLUser } from "../../../../types";
+import Loading from "../loading";
 
 const UsersAdmin = (): JSX.Element => {
   const [users, setUsers] = useState<MySQLUser[]>([]);
@@ -78,16 +79,7 @@ const UsersAdmin = (): JSX.Element => {
   };
 
   if (isLoading) {
-    return (
-      <div className="d-flex align-items-center pt-5 pb-5">
-        <strong>Loading...</strong>
-        <div
-          className="spinner-border ms-auto text-warning"
-          role="status"
-          aria-hidden="true"
-        ></div>
-      </div>
-    );
+    return <Loading />;
   }
 
   return (
