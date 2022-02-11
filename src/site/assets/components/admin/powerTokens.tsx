@@ -117,7 +117,9 @@ const PowerTokens = (): JSX.Element => {
           <div className="col text-center">{token.type}</div>
           <div className="col text-center">
             {token.question_id ? (
-              <a href={`/admin/questions/${token.question_id}`}></a>
+              <a href={`/admin/questions/edit/${token.question_id}`}>
+                {token.question_id}
+              </a>
             ) : null}
           </div>
           <div className="col text-center">

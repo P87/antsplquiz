@@ -47,7 +47,7 @@ used before, or for a while.
 
      CONFIG_OVERRIDE=/path/to/config.json yarn ts-node src/site/App.ts
 
-##TODO:
+## TODO:
 
 - Improve MySQL usage with indexes etc.
 - Move answer sets to admin, the app should be creating them not the database

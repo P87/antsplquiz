@@ -158,15 +158,17 @@ const Questions = (): JSX.Element => {
       {activeTab === Tabs.ACTIVE &&
         (Object.keys(activeQuestions).length ? (
           <div>
-            {Object.keys(activeQuestions).map((key) => {
-              return (
-                <ActiveQuestionBox
-                  hasAnswered={!!activeAnswers[key]?.length}
-                  question={activeQuestions[key]}
-                  activeAnswer={activeAnswers[key]}
-                />
-              );
-            })}
+            {Object.keys(activeQuestions)
+              .sort((a, b) => parseInt(b) - parseInt(a))
+              .map((key) => {
+                return (
+                  <ActiveQuestionBox
+                    hasAnswered={!!activeAnswers[key]?.length}
+                    question={activeQuestions[key]}
+                    activeAnswer={activeAnswers[key]}
+                  />
+                );
+              })}
           </div>
         ) : (
           <div className="col">No Active Questions</div>
@@ -185,6 +187,7 @@ const Questions = (): JSX.Element => {
                   ? correctAnswers && !!correctAnswers[key]
                   : !correctAnswers || (correctAnswers && !correctAnswers[key]);
               })
+              .sort((a, b) => parseInt(b) - parseInt(a))
               .map((key) => {
                 const isSettled = correctAnswers && !!correctAnswers[key];
                 const hasAnswered = !!previousAnswers[key]?.length;
